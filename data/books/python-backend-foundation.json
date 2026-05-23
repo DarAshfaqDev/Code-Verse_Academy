@@ -1,0 +1,6932 @@
+{
+  "slug": "python-backend-foundation",
+  "title": "Python Backend Foundation",
+  "category": "Backend",
+  "level": "Book 1",
+  "description": "Begin Python backend development with setup, Python basics, APIs and backend thinking.",
+  "source": "BOOK 1 Python Backend Foundation.docx",
+  "chapters": [
+    {
+      "number": 1,
+      "slug": "chapter-01",
+      "title": "Python Fundamentals",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "Data Types, Mutability, Comprehensions & Memory Model"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Backend systems are designed to process, store, and transfer data efficiently. Every request that hits your server (API call, database query, authentication check) involves data structures and memory operations."
+        },
+        {
+          "type": "subheading",
+          "text": "In real backend workflows:"
+        },
+        {
+          "type": "list",
+          "text": "Client sends JSON → Python converts it into dict"
+        },
+        {
+          "type": "list",
+          "text": "Database returns rows → stored as list of dicts"
+        },
+        {
+          "type": "list",
+          "text": "Caching systems → depend on immutable keys (tuples, strings)"
+        },
+        {
+          "type": "list",
+          "text": "High-traffic systems → require efficient memory handling"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 This means:"
+        },
+        {
+          "type": "list",
+          "text": "Choosing the wrong data type = slow system"
+        },
+        {
+          "type": "list",
+          "text": "Not understanding mutability = unexpected bugs"
+        },
+        {
+          "type": "list",
+          "text": "Ignoring memory behavior = hard-to-debug issues"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Interview Perspective:"
+        },
+        {
+          "type": "list",
+          "text": "Almost every Python backend interview includes:"
+        },
+        {
+          "type": "list",
+          "text": "Data types"
+        },
+        {
+          "type": "list",
+          "text": "Mutability"
+        },
+        {
+          "type": "list",
+          "text": "Memory model"
+        },
+        {
+          "type": "list",
+          "text": "Comprehensions"
+        },
+        {
+          "type": "paragraph",
+          "text": "This chapter builds your mental model of how Python actually works."
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "Python Data Types (In-Depth Theory + Practice)"
+        },
+        {
+          "type": "subheading",
+          "text": "Python is a dynamically typed, high-level language, meaning:"
+        },
+        {
+          "type": "list",
+          "text": "You don’t declare variable types explicitly"
+        },
+        {
+          "type": "list",
+          "text": "Types are determined at runtime"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "x = 10 # intx = \"Ali\" # now string"
+        },
+        {
+          "type": "paragraph",
+          "text": "👉 Python stores everything as objects, not raw values."
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 List (Dynamic Array Structure)"
+        },
+        {
+          "type": "paragraph",
+          "text": "A list is a resizable array of references to objects."
+        },
+        {
+          "type": "subheading",
+          "text": "Internal Working:"
+        },
+        {
+          "type": "list",
+          "text": "Python lists do NOT store actual values"
+        },
+        {
+          "type": "list",
+          "text": "They store pointers (references) to objects"
+        },
+        {
+          "type": "list",
+          "text": "When list grows → Python allocates extra memory (over-allocation strategy)"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "numbers = [1, 2, 3]"
+        },
+        {
+          "type": "subheading",
+          "text": "Memory concept:"
+        },
+        {
+          "type": "subheading",
+          "text": "numbers → [ref → 1, ref → 2, ref → 3]"
+        },
+        {
+          "type": "subheading",
+          "text": "Advanced Properties:"
+        },
+        {
+          "type": "list",
+          "text": "Supports heterogeneous data"
+        },
+        {
+          "type": "subheading",
+          "text": "data = [1, \"Ali\", 3.5, True]"
+        },
+        {
+          "type": "list",
+          "text": "Supports slicing"
+        },
+        {
+          "type": "subheading",
+          "text": "print(data[1:3])"
+        },
+        {
+          "type": "list",
+          "text": "Supports negative indexing"
+        },
+        {
+          "type": "subheading",
+          "text": "print(data[-1]) # last element"
+        },
+        {
+          "type": "subheading",
+          "text": "Performance Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Append → O(1) (amortized)"
+        },
+        {
+          "type": "list",
+          "text": "Insert at beginning → O(n)"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Large lists → expensive operations"
+        },
+        {
+          "type": "list",
+          "text": "Prefer generators for large data"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Tuple (Immutable Data Container)"
+        },
+        {
+          "type": "paragraph",
+          "text": "A tuple is an immutable sequence."
+        },
+        {
+          "type": "subheading",
+          "text": "Internal Behavior:"
+        },
+        {
+          "type": "list",
+          "text": "Stored as fixed-size object"
+        },
+        {
+          "type": "list",
+          "text": "No resizing → memory efficient"
+        },
+        {
+          "type": "list",
+          "text": "Faster iteration than list"
+        },
+        {
+          "type": "subheading",
+          "text": "Important Concept: Hashability"
+        },
+        {
+          "type": "subheading",
+          "text": "Tuples can be used as dictionary keys because:"
+        },
+        {
+          "type": "list",
+          "text": "They are immutable"
+        },
+        {
+          "type": "list",
+          "text": "Their hash value does not change"
+        },
+        {
+          "type": "subheading",
+          "text": "location = {(10, 20): \"Office\"}"
+        },
+        {
+          "type": "subheading",
+          "text": "Nested Tuple:"
+        },
+        {
+          "type": "subheading",
+          "text": "t = (1, [2, 3])"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Tuple is immutable, but inner list is mutable"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 This is a common interview trap"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Set (Hash-Based Collection)"
+        },
+        {
+          "type": "paragraph",
+          "text": "A set is implemented using a hash table, similar to dictionary keys."
+        },
+        {
+          "type": "subheading",
+          "text": "Internal Mechanism:"
+        },
+        {
+          "type": "list",
+          "text": "Each element → hashed"
+        },
+        {
+          "type": "list",
+          "text": "Stored in bucket"
+        },
+        {
+          "type": "list",
+          "text": "No order guarantee"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "s = {1, 2, 3}"
+        },
+        {
+          "type": "subheading",
+          "text": "Important Properties:"
+        },
+        {
+          "type": "list",
+          "text": "No duplicates"
+        },
+        {
+          "type": "list",
+          "text": "Fast membership testing"
+        },
+        {
+          "type": "subheading",
+          "text": "Mathematical Operations:"
+        },
+        {
+          "type": "subheading",
+          "text": "a = {1, 2, 3}b = {2, 3, 4}print(a & b) # intersectionprint(a | b) # union"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Useful for:"
+        },
+        {
+          "type": "list",
+          "text": "Removing duplicates"
+        },
+        {
+          "type": "list",
+          "text": "Permission checking"
+        },
+        {
+          "type": "list",
+          "text": "Comparing datasets"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Dictionary (Hash Map)"
+        },
+        {
+          "type": "paragraph",
+          "text": "A dictionary is a mapping between keys and values, implemented using hashing."
+        },
+        {
+          "type": "subheading",
+          "text": "Internal Mechanism:"
+        },
+        {
+          "type": "list",
+          "text": "Key → hash function"
+        },
+        {
+          "type": "list",
+          "text": "Hash → memory index"
+        },
+        {
+          "type": "list",
+          "text": "Value stored at that location"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "user = {\"id\": 1, \"name\": \"Ali\"}"
+        },
+        {
+          "type": "subheading",
+          "text": "Important Properties:"
+        },
+        {
+          "type": "list",
+          "text": "Keys must be immutable"
+        },
+        {
+          "type": "list",
+          "text": "Values can be anything"
+        },
+        {
+          "type": "subheading",
+          "text": "Collision Handling:"
+        },
+        {
+          "type": "list",
+          "text": "If two keys have same hash → Python resolves internally"
+        },
+        {
+          "type": "subheading",
+          "text": "Ordered Nature:"
+        },
+        {
+          "type": "list",
+          "text": "Python 3.7+ → preserves insertion order"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Dict is the most used structure"
+        },
+        {
+          "type": "list",
+          "text": "Represents:"
+        },
+        {
+          "type": "list",
+          "text": "JSON"
+        },
+        {
+          "type": "list",
+          "text": "API payloads"
+        },
+        {
+          "type": "list",
+          "text": "Database records"
+        },
+        {
+          "type": "heading",
+          "text": "Mutability vs Immutability (Deep Conceptual Understanding)"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 What is Mutability?"
+        },
+        {
+          "type": "subheading",
+          "text": "Mutability means:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Whether an object can change without changing its identity"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "lst = [1, 2]id_before = id(lst)lst.append(3)id_after = id(lst)print(id_before == id_after) # True"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Same object modified"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 What is Immutability?"
+        },
+        {
+          "type": "paragraph",
+          "text": "x = 10id_before = id(x)x = x + 5id_after = id(x)print(id_before == id_after) # False"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 New object created"
+        },
+        {
+          "type": "subheading",
+          "text": "🔥 Why Python Uses Both?"
+        },
+        {
+          "type": "list",
+          "text": "Mutable → flexibility"
+        },
+        {
+          "type": "list",
+          "text": "Immutable → safety + performance"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 String Immutability"
+        },
+        {
+          "type": "subheading",
+          "text": "s = \"hello\"s = s + \" world\""
+        },
+        {
+          "type": "subheading",
+          "text": "👉 New string created (old not modified)"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Benefits of Immutability:"
+        },
+        {
+          "type": "list",
+          "text": "Thread-safe"
+        },
+        {
+          "type": "list",
+          "text": "Can be hashed"
+        },
+        {
+          "type": "list",
+          "text": "Safe in caching systems"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Mutable Pitfalls (Important)"
+        },
+        {
+          "type": "subheading",
+          "text": "a = [[1, 2]] * 3a[0][0] = 100print(a)"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Output: [[100, 2], [100, 2], [100, 2]]"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 All inner lists share same reference"
+        },
+        {
+          "type": "heading",
+          "text": "List Comprehensions (Advanced Theory)"
+        },
+        {
+          "type": "paragraph",
+          "text": "List comprehensions are based on functional programming concepts."
+        },
+        {
+          "type": "subheading",
+          "text": "Concept:"
+        },
+        {
+          "type": "subheading",
+          "text": "Instead of writing loops, we express:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 “What we want” instead of “How to do it”"
+        },
+        {
+          "type": "subheading",
+          "text": "Syntax Breakdown:"
+        },
+        {
+          "type": "subheading",
+          "text": "[expression for item in iterable if condition]"
+        },
+        {
+          "type": "subheading",
+          "text": "Execution Steps:"
+        },
+        {
+          "type": "list",
+          "text": "Iterate over iterable"
+        },
+        {
+          "type": "list",
+          "text": "Apply condition"
+        },
+        {
+          "type": "list",
+          "text": "Apply transformation"
+        },
+        {
+          "type": "list",
+          "text": "Store in new list"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "nums = [1, 2, 3, 4]result = [x*x for x in nums if x % 2 == 0]"
+        },
+        {
+          "type": "subheading",
+          "text": "Performance Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Faster than loops (optimized internally)"
+        },
+        {
+          "type": "list",
+          "text": "But avoid overly complex comprehensions"
+        },
+        {
+          "type": "subheading",
+          "text": "Nested Comprehension (Advanced):"
+        },
+        {
+          "type": "subheading",
+          "text": "matrix = [[1, 2], [3, 4]]flat = [num for row in matrix for num in row]"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Used in:"
+        },
+        {
+          "type": "list",
+          "text": "Data cleaning"
+        },
+        {
+          "type": "list",
+          "text": "Response formatting"
+        },
+        {
+          "type": "list",
+          "text": "Filtering"
+        },
+        {
+          "type": "heading",
+          "text": "Dictionary Comprehension (Deep Understanding)"
+        },
+        {
+          "type": "subheading",
+          "text": "Concept:"
+        },
+        {
+          "type": "subheading",
+          "text": "Used to create dictionaries dynamically"
+        },
+        {
+          "type": "subheading",
+          "text": "Syntax:"
+        },
+        {
+          "type": "subheading",
+          "text": "{key: value for item in iterable if condition}"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "nums = [1, 2, 3]square_map = {x: x*x for x in nums}"
+        },
+        {
+          "type": "subheading",
+          "text": "Advanced Use:"
+        },
+        {
+          "type": "subheading",
+          "text": "users = [\"Ali\", \"Sara\"]user_dict = {name: len(name) for name in users}"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use:"
+        },
+        {
+          "type": "list",
+          "text": "Mapping IDs to objects"
+        },
+        {
+          "type": "list",
+          "text": "Creating lookup tables"
+        },
+        {
+          "type": "list",
+          "text": "Transforming API data"
+        },
+        {
+          "type": "heading",
+          "text": "Python Memory Model (Very Important Theory)"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Everything is an Object"
+        },
+        {
+          "type": "subheading",
+          "text": "In Python:"
+        },
+        {
+          "type": "list",
+          "text": "Numbers → objects"
+        },
+        {
+          "type": "list",
+          "text": "Strings → objects"
+        },
+        {
+          "type": "list",
+          "text": "Lists → objects"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Names vs Objects"
+        },
+        {
+          "type": "subheading",
+          "text": "a = 10"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 a is NOT the value"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 a is a reference (label) pointing to object 10"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Multiple References"
+        },
+        {
+          "type": "subheading",
+          "text": "a = [1, 2]b = a"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Both point to same object"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Object Identity"
+        },
+        {
+          "type": "subheading",
+          "text": "print(id(a))"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Returns memory address"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Garbage Collection"
+        },
+        {
+          "type": "subheading",
+          "text": "Python automatically deletes objects when:"
+        },
+        {
+          "type": "list",
+          "text": "No references remain"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Reference Counting"
+        },
+        {
+          "type": "paragraph",
+          "text": "Each object tracks how many references point to it."
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Function Argument Passing"
+        },
+        {
+          "type": "subheading",
+          "text": "Python uses:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Pass-by-object-reference"
+        },
+        {
+          "type": "subheading",
+          "text": "def update(x): x.append(10)data = [1, 2]update(data)"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Original list changes"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Immutable Case:"
+        },
+        {
+          "type": "subheading",
+          "text": "def update(x): x = x + 10a = 5update(a)print(a) # unchanged"
+        },
+        {
+          "type": "subheading",
+          "text": "🔥 Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Mutable objects → can cause side effects"
+        },
+        {
+          "type": "list",
+          "text": "Immutable → safer for APIs and caching"
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples"
+        },
+        {
+          "type": "subheading",
+          "text": "API Transformation"
+        },
+        {
+          "type": "subheading",
+          "text": "users = [{\"name\": \"Ali\"}, {\"name\": \"Sara\"}]names = [u[\"name\"] for u in users]"
+        },
+        {
+          "type": "subheading",
+          "text": "Deduplication"
+        },
+        {
+          "type": "subheading",
+          "text": "ids = [1, 2, 2, 3]unique = list(set(ids))"
+        },
+        {
+          "type": "subheading",
+          "text": "Lookup Optimization"
+        },
+        {
+          "type": "subheading",
+          "text": "users = {1: \"Ali\", 2: \"Sara\"}print(users.get(1))"
+        },
+        {
+          "type": "heading",
+          "text": "Code Patterns"
+        },
+        {
+          "type": "subheading",
+          "text": "Counting"
+        },
+        {
+          "type": "subheading",
+          "text": "words = [\"a\", \"b\", \"a\"]count = {}for w in words: count[w] = count.get(w, 0) + 1"
+        },
+        {
+          "type": "subheading",
+          "text": "Flatten"
+        },
+        {
+          "type": "subheading",
+          "text": "flat = [x for row in matrix for x in row]"
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "list",
+          "text": "Using list instead of set for lookup"
+        },
+        {
+          "type": "list",
+          "text": "Mutable default arguments"
+        },
+        {
+          "type": "list",
+          "text": "Confusing copy with reference"
+        },
+        {
+          "type": "list",
+          "text": "Nested mutable objects inside tuple"
+        },
+        {
+          "type": "list",
+          "text": "Overusing complex comprehensions"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q: Why are dict and set fast?"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Because of hashing (O(1) operations)"
+        },
+        {
+          "type": "subheading",
+          "text": "Q: What is Python memory model?"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Objects + references"
+        },
+        {
+          "type": "subheading",
+          "text": "Q: Difference between == and is?"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 == → value"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 is → identity"
+        },
+        {
+          "type": "subheading",
+          "text": "Q: Why tuple as key?"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Immutable + hashable"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "Python uses objects and references"
+        },
+        {
+          "type": "list",
+          "text": "List → dynamic, mutable"
+        },
+        {
+          "type": "list",
+          "text": "Tuple → immutable, hashable"
+        },
+        {
+          "type": "list",
+          "text": "Set → unique, fast lookup"
+        },
+        {
+          "type": "list",
+          "text": "Dict → key-value, core backend structure"
+        },
+        {
+          "type": "list",
+          "text": "Mutable → same object changes"
+        },
+        {
+          "type": "list",
+          "text": "Immutable → new object created"
+        },
+        {
+          "type": "list",
+          "text": "Comprehensions → efficient data transformation"
+        },
+        {
+          "type": "list",
+          "text": "Memory model:"
+        },
+        {
+          "type": "list",
+          "text": "Variables → references"
+        },
+        {
+          "type": "list",
+          "text": "Objects → stored in memory"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "slug": "chapter-02",
+      "title": "Functions & Scope",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "**(*args, kwargs, Closures, LEGB Rule, First-Class Functions)"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Functions are the core building blocks of any backend system."
+        },
+        {
+          "type": "subheading",
+          "text": "In real backend applications:"
+        },
+        {
+          "type": "list",
+          "text": "Every API endpoint is a function"
+        },
+        {
+          "type": "list",
+          "text": "Business logic is written inside functions"
+        },
+        {
+          "type": "list",
+          "text": "Middleware, authentication, validation → all use functions"
+        },
+        {
+          "type": "list",
+          "text": "Frameworks like FastAPI heavily rely on function behavior"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you don’t understand functions deeply:"
+        },
+        {
+          "type": "list",
+          "text": "You will struggle with API design"
+        },
+        {
+          "type": "list",
+          "text": "You will write repetitive and messy code"
+        },
+        {
+          "type": "list",
+          "text": "You will fail interview questions on Python internals"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you master this:"
+        },
+        {
+          "type": "list",
+          "text": "You can write clean, reusable, scalable backend code"
+        },
+        {
+          "type": "list",
+          "text": "You can understand advanced concepts like decorators, dependency injection"
+        },
+        {
+          "type": "list",
+          "text": "You will confidently answer interview questions"
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "Functions in Python (Quick Foundation)"
+        },
+        {
+          "type": "paragraph",
+          "text": "A function is a block of reusable code."
+        },
+        {
+          "type": "subheading",
+          "text": "def greet(name): return f\"Hello {name}\""
+        },
+        {
+          "type": "subheading",
+          "text": "Key Points:"
+        },
+        {
+          "type": "list",
+          "text": "Functions improve code reusability"
+        },
+        {
+          "type": "list",
+          "text": "Functions reduce duplication"
+        },
+        {
+          "type": "list",
+          "text": "Functions improve readability"
+        },
+        {
+          "type": "heading",
+          "text": "*args (Variable Positional Arguments)"
+        },
+        {
+          "type": "paragraph",
+          "text": "*args allows a function to accept multiple positional arguments."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def add_numbers(*args): return sum(args)print(add_numbers(1, 2, 3)) # 6"
+        },
+        {
+          "type": "subheading",
+          "text": "Internal Understanding:"
+        },
+        {
+          "type": "list",
+          "text": "args is a tuple"
+        },
+        {
+          "type": "list",
+          "text": "You can pass any number of values"
+        },
+        {
+          "type": "subheading",
+          "text": "def check(*args): print(type(args))check(1, 2, 3) # <class 'tuple'>"
+        },
+        {
+          "type": "subheading",
+          "text": "When to Use:"
+        },
+        {
+          "type": "list",
+          "text": "Unknown number of inputs"
+        },
+        {
+          "type": "list",
+          "text": "Flexible APIs"
+        },
+        {
+          "type": "list",
+          "text": "Logging functions"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Case:"
+        },
+        {
+          "type": "subheading",
+          "text": "def log_events(*events): for event in events: print(f\"Logging: {event}\")"
+        },
+        {
+          "type": "heading",
+          "text": "**kwargs (Variable Keyword Arguments)"
+        },
+        {
+          "type": "paragraph",
+          "text": "**kwargs allows passing named arguments."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def create_user(**kwargs): print(kwargs)create_user(name=\"Ali\", age=25)"
+        },
+        {
+          "type": "subheading",
+          "text": "Internal Understanding:"
+        },
+        {
+          "type": "list",
+          "text": "kwargs is a dictionary"
+        },
+        {
+          "type": "subheading",
+          "text": "def check(**kwargs): print(type(kwargs))check(a=1, b=2) # <class 'dict'>"
+        },
+        {
+          "type": "subheading",
+          "text": "When to Use:"
+        },
+        {
+          "type": "list",
+          "text": "Dynamic data input"
+        },
+        {
+          "type": "list",
+          "text": "Configuration"
+        },
+        {
+          "type": "list",
+          "text": "API payloads"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Case:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def update_user(**data): for key, value in data.items(): print(f\"{key} = {value}\")"
+        },
+        {
+          "type": "heading",
+          "text": "Combining *args and **kwargs"
+        },
+        {
+          "type": "paragraph",
+          "text": "def func(a, *args, **kwargs): print(a) print(args) print(kwargs)func(1, 2, 3, x=10, y=20)"
+        },
+        {
+          "type": "subheading",
+          "text": "Order Rule (Important for Interview):"
+        },
+        {
+          "type": "subheading",
+          "text": "Normal arguments → *args → **kwargs"
+        },
+        {
+          "type": "heading",
+          "text": "First-Class Functions (Very Important)"
+        },
+        {
+          "type": "paragraph",
+          "text": "In Python, functions are first-class citizens."
+        },
+        {
+          "type": "subheading",
+          "text": "👉 This means:"
+        },
+        {
+          "type": "list",
+          "text": "Functions can be assigned to variables"
+        },
+        {
+          "type": "list",
+          "text": "Functions can be passed as arguments"
+        },
+        {
+          "type": "list",
+          "text": "Functions can return other functions"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def greet(): return \"Hello\"func = greetprint(func()) # Hello"
+        },
+        {
+          "type": "subheading",
+          "text": "Passing Function as Argument:"
+        },
+        {
+          "type": "subheading",
+          "text": "def execute(func): return func()def say_hi(): return \"Hi\"print(execute(say_hi))"
+        },
+        {
+          "type": "subheading",
+          "text": "Returning Function:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def outer(): def inner(): return \"Inner function\" return innerf = outer()print(f())"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Importance:"
+        },
+        {
+          "type": "list",
+          "text": "Used in decorators"
+        },
+        {
+          "type": "list",
+          "text": "Used in middleware"
+        },
+        {
+          "type": "list",
+          "text": "Used in dependency injection"
+        },
+        {
+          "type": "heading",
+          "text": "Closures (Important Concept)"
+        },
+        {
+          "type": "paragraph",
+          "text": "A closure is a function that remembers variables from its outer scope."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def outer(x): def inner(): return x return innerf = outer(10)print(f()) # 10"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Idea:"
+        },
+        {
+          "type": "list",
+          "text": "Inner function remembers x"
+        },
+        {
+          "type": "list",
+          "text": "Even after outer function finishes"
+        },
+        {
+          "type": "subheading",
+          "text": "Real Understanding:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def counter(): count = 0 def increment(): nonlocal count count += 1 return count return incrementc = counter()print(c()) # 1print(c()) # 2"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Case:"
+        },
+        {
+          "type": "list",
+          "text": "Maintaining state"
+        },
+        {
+          "type": "list",
+          "text": "Rate limiting"
+        },
+        {
+          "type": "list",
+          "text": "Caching"
+        },
+        {
+          "type": "heading",
+          "text": "LEGB Rule (Scope Resolution)"
+        },
+        {
+          "type": "subheading",
+          "text": "Python resolves variables using the LEGB rule:"
+        },
+        {
+          "type": "subheading",
+          "text": "L → LocalE → EnclosingG → GlobalB → Built-in"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "x = \"global\"def outer(): x = \"enclosing\" def inner(): x = \"local\" print(x) inner()outer()"
+        },
+        {
+          "type": "subheading",
+          "text": "Output:"
+        },
+        {
+          "type": "subheading",
+          "text": "local"
+        },
+        {
+          "type": "subheading",
+          "text": "Step-by-step Resolution:"
+        },
+        {
+          "type": "list",
+          "text": "Check Local scope"
+        },
+        {
+          "type": "list",
+          "text": "Then Enclosing"
+        },
+        {
+          "type": "list",
+          "text": "Then Global"
+        },
+        {
+          "type": "list",
+          "text": "Then Built-in"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 2:"
+        },
+        {
+          "type": "subheading",
+          "text": "x = 10def func(): print(x)func() # 10"
+        },
+        {
+          "type": "subheading",
+          "text": "Using global keyword:"
+        },
+        {
+          "type": "subheading",
+          "text": "x = 10def change(): global x x = 20change()print(x) # 20"
+        },
+        {
+          "type": "subheading",
+          "text": "Using nonlocal keyword:"
+        },
+        {
+          "type": "subheading",
+          "text": "def outer(): x = 10 def inner(): nonlocal x x = 20 inner() print(x)outer() # 20"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Importance:"
+        },
+        {
+          "type": "list",
+          "text": "Avoid variable conflicts"
+        },
+        {
+          "type": "list",
+          "text": "Control data flow"
+        },
+        {
+          "type": "list",
+          "text": "Debug issues easily"
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 1: API Handler"
+        },
+        {
+          "type": "subheading",
+          "text": "def get_user(user_id): return {\"id\": user_id}"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 2: Dynamic Filters using **kwargs"
+        },
+        {
+          "type": "subheading",
+          "text": "def filter_users(**filters): print(filters)filter_users(age=25, city=\"Delhi\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 3: Middleware Pattern"
+        },
+        {
+          "type": "paragraph",
+          "text": "def middleware(func): def wrapper(): print(\"Before\") result = func() print(\"After\") return result return wrapper"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 4: Closure for State"
+        },
+        {
+          "type": "paragraph",
+          "text": "def request_counter(): count = 0 def handle(): nonlocal count count += 1 return count return handle"
+        },
+        {
+          "type": "heading",
+          "text": "Code Examples (Important Patterns)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 1: Flexible Function"
+        },
+        {
+          "type": "subheading",
+          "text": "def process_data(*args, **kwargs): print(args) print(kwargs)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 2: Function Dispatcher"
+        },
+        {
+          "type": "paragraph",
+          "text": "def add(x, y): return x + ydef multiply(x, y): return x * yoperations = { \"add\": add, \"mul\": multiply}print(operations[\"add\"](2, 3))"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 3: Callback Function"
+        },
+        {
+          "type": "paragraph",
+          "text": "def process(func): return func(10)def square(x): return x * xprint(process(square))"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 4: Closure Cache"
+        },
+        {
+          "type": "paragraph",
+          "text": "def cache(): data = {} def get(key): return data.get(key) def set(key, value): data[key] = value return get, set"
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Confusing *args with list"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 It is a tuple"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Confusing **kwargs with list"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 It is a dictionary"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Wrong order of arguments"
+        },
+        {
+          "type": "subheading",
+          "text": "def func(*args, a): # ❌ wrong pass"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Forgetting nonlocal in closures"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Overusing global variables"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not understanding scope → leads to bugs"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q1: What is *args?"
+        },
+        {
+          "type": "subheading",
+          "text": "Answer:"
+        },
+        {
+          "type": "subheading",
+          "text": "Allows multiple positional arguments, stored as tuple"
+        },
+        {
+          "type": "subheading",
+          "text": "Q2: What is **kwargs?"
+        },
+        {
+          "type": "subheading",
+          "text": "Answer:"
+        },
+        {
+          "type": "subheading",
+          "text": "Allows multiple keyword arguments, stored as dictionary"
+        },
+        {
+          "type": "subheading",
+          "text": "Q3: Difference between args and kwargs?"
+        },
+        {
+          "type": "list",
+          "text": "args → positional"
+        },
+        {
+          "type": "list",
+          "text": "kwargs → named"
+        },
+        {
+          "type": "subheading",
+          "text": "Q4: What are first-class functions?"
+        },
+        {
+          "type": "subheading",
+          "text": "Functions treated as objects (can pass, return, assign)"
+        },
+        {
+          "type": "subheading",
+          "text": "Q5: What is closure?"
+        },
+        {
+          "type": "subheading",
+          "text": "Function remembering outer variable even after outer function ends"
+        },
+        {
+          "type": "subheading",
+          "text": "Q6: What is LEGB rule?"
+        },
+        {
+          "type": "subheading",
+          "text": "Scope resolution order:"
+        },
+        {
+          "type": "subheading",
+          "text": "Local → Enclosing → Global → Built-in"
+        },
+        {
+          "type": "subheading",
+          "text": "Q7: What does this print?"
+        },
+        {
+          "type": "subheading",
+          "text": "x = 10def func(): x = 20func()print(x)"
+        },
+        {
+          "type": "subheading",
+          "text": "Answer: 10 (global unchanged)"
+        },
+        {
+          "type": "subheading",
+          "text": "Q8: Why use closures?"
+        },
+        {
+          "type": "list",
+          "text": "Maintain state"
+        },
+        {
+          "type": "list",
+          "text": "Avoid global variables"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "Functions = reusable logic blocks"
+        },
+        {
+          "type": "list",
+          "text": "*args → multiple positional → tuple"
+        },
+        {
+          "type": "list",
+          "text": "**kwargs → multiple named → dictionary"
+        },
+        {
+          "type": "list",
+          "text": "First-class functions → can pass, return, assign"
+        },
+        {
+          "type": "list",
+          "text": "Closures → remember outer variables"
+        },
+        {
+          "type": "list",
+          "text": "LEGB → Local → Enclosing → Global → Built-in"
+        },
+        {
+          "type": "list",
+          "text": "Use:"
+        },
+        {
+          "type": "list",
+          "text": "closures for state"
+        },
+        {
+          "type": "list",
+          "text": "kwargs for flexibility"
+        },
+        {
+          "type": "list",
+          "text": "functions for modular design"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "slug": "chapter-03",
+      "title": "Decorators (Interview Favorite)",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "(Basic Decorators, Decorators with Arguments, Real-World Use Cases)"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Decorators are one of the most important and most asked topics in Python backend interviews."
+        },
+        {
+          "type": "subheading",
+          "text": "In real backend systems, decorators are used everywhere:"
+        },
+        {
+          "type": "list",
+          "text": "Authentication (@login_required)"
+        },
+        {
+          "type": "list",
+          "text": "Authorization (@admin_only)"
+        },
+        {
+          "type": "list",
+          "text": "Logging (@log_request)"
+        },
+        {
+          "type": "list",
+          "text": "Rate limiting"
+        },
+        {
+          "type": "list",
+          "text": "Caching"
+        },
+        {
+          "type": "list",
+          "text": "Validation"
+        },
+        {
+          "type": "subheading",
+          "text": "Frameworks like FastAPI and Flask internally use decorators for:"
+        },
+        {
+          "type": "list",
+          "text": "Routing (@app.get())"
+        },
+        {
+          "type": "list",
+          "text": "Middleware"
+        },
+        {
+          "type": "list",
+          "text": "Dependency injection"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you don’t understand decorators:"
+        },
+        {
+          "type": "list",
+          "text": "You won’t understand how frameworks work"
+        },
+        {
+          "type": "list",
+          "text": "You will struggle in interviews"
+        },
+        {
+          "type": "list",
+          "text": "You will write repetitive code"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you master decorators:"
+        },
+        {
+          "type": "list",
+          "text": "You write clean and reusable backend code"
+        },
+        {
+          "type": "list",
+          "text": "You can build your own frameworks"
+        },
+        {
+          "type": "list",
+          "text": "You will answer interview questions easily"
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "What is a Decorator?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A decorator is a function that modifies another function without changing its code."
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Simple idea:"
+        },
+        {
+          "type": "list",
+          "text": "Take a function"
+        },
+        {
+          "type": "list",
+          "text": "Add extra behavior"
+        },
+        {
+          "type": "list",
+          "text": "Return a new function"
+        },
+        {
+          "type": "subheading",
+          "text": "Basic Example (Without Decorator)"
+        },
+        {
+          "type": "paragraph",
+          "text": "def greet(): print(\"Hello\")def wrapper(): print(\"Before\") greet() print(\"After\")wrapper()"
+        },
+        {
+          "type": "subheading",
+          "text": "Problem:"
+        },
+        {
+          "type": "list",
+          "text": "Code repetition"
+        },
+        {
+          "type": "list",
+          "text": "Not reusable"
+        },
+        {
+          "type": "heading",
+          "text": "Basic Decorator (Core Concept)"
+        },
+        {
+          "type": "subheading",
+          "text": "Step-by-step:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def decorator(func): def wrapper(): print(\"Before function\") func() print(\"After function\") return wrapper"
+        },
+        {
+          "type": "subheading",
+          "text": "Applying Decorator:"
+        },
+        {
+          "type": "subheading",
+          "text": "def greet(): print(\"Hello\")greet = decorator(greet)greet()"
+        },
+        {
+          "type": "subheading",
+          "text": "Cleaner Syntax (Important)"
+        },
+        {
+          "type": "subheading",
+          "text": "@decoratordef greet(): print(\"Hello\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Output:"
+        },
+        {
+          "type": "subheading",
+          "text": "Before functionHelloAfter function"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Idea:"
+        },
+        {
+          "type": "list",
+          "text": "@decorator = greet = decorator(greet)"
+        },
+        {
+          "type": "heading",
+          "text": "Decorator with Arguments (Important)"
+        },
+        {
+          "type": "subheading",
+          "text": "Problem:"
+        },
+        {
+          "type": "paragraph",
+          "text": "Basic decorator only works with functions having no arguments."
+        },
+        {
+          "type": "subheading",
+          "text": "Solution:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def decorator(func): def wrapper(*args, **kwargs): print(\"Before\") result = func(*args, **kwargs) print(\"After\") return result return wrapper"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "@decoratordef add(a, b): return a + bprint(add(2, 3))"
+        },
+        {
+          "type": "subheading",
+          "text": "Why Important?"
+        },
+        {
+          "type": "list",
+          "text": "Works with any function"
+        },
+        {
+          "type": "list",
+          "text": "Required in real backend systems"
+        },
+        {
+          "type": "heading",
+          "text": "Decorator with Parameters (Advanced)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sometimes decorators themselves need arguments."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def repeat(n): def decorator(func): def wrapper(*args, **kwargs): for _ in range(n): func(*args, **kwargs) return wrapper return decorator"
+        },
+        {
+          "type": "subheading",
+          "text": "Usage:"
+        },
+        {
+          "type": "subheading",
+          "text": "@repeat(3)def say_hi(): print(\"Hi\")say_hi()"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Idea:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 3 layers:"
+        },
+        {
+          "type": "list",
+          "text": "Outer function → takes decorator arguments"
+        },
+        {
+          "type": "list",
+          "text": "Decorator function → takes function"
+        },
+        {
+          "type": "list",
+          "text": "Wrapper → executes function"
+        },
+        {
+          "type": "heading",
+          "text": "Preserving Function Metadata (Important)"
+        },
+        {
+          "type": "subheading",
+          "text": "Problem:"
+        },
+        {
+          "type": "paragraph",
+          "text": "Decorators overwrite function name and docstring."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def decorator(func): def wrapper(): return func() return wrapper@decoratordef greet(): \"\"\"This is greet\"\"\" return \"Hello\"print(greet.__name__) # wrapper ❌"
+        },
+        {
+          "type": "subheading",
+          "text": "Solution:"
+        },
+        {
+          "type": "paragraph",
+          "text": "from functools import wrapsdef decorator(func): @wraps(func) def wrapper(*args, **kwargs): return func(*args, **kwargs) return wrapper"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Always use @wraps in production code"
+        },
+        {
+          "type": "heading",
+          "text": "Real Understanding (Behind the Scene)"
+        },
+        {
+          "type": "subheading",
+          "text": "Decorator works like:"
+        },
+        {
+          "type": "subheading",
+          "text": "greet = decorator(greet)"
+        },
+        {
+          "type": "subheading",
+          "text": "So:"
+        },
+        {
+          "type": "list",
+          "text": "Original function is replaced"
+        },
+        {
+          "type": "list",
+          "text": "Wrapper controls execution"
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples (Backend)"
+        },
+        {
+          "type": "heading",
+          "text": "Example 1: Logging Decorator"
+        },
+        {
+          "type": "paragraph",
+          "text": "def log(func): def wrapper(*args, **kwargs): print(f\"Calling {func.__name__}\") result = func(*args, **kwargs) print(f\"Finished {func.__name__}\") return result return wrapper@logdef process(): print(\"Processing data\")process()"
+        },
+        {
+          "type": "heading",
+          "text": "Example 2: Authentication Decorator"
+        },
+        {
+          "type": "paragraph",
+          "text": "def require_auth(func): def wrapper(user, *args, **kwargs): if not user.get(\"is_authenticated\"): return \"Unauthorized\" return func(user, *args, **kwargs) return wrapper@require_authdef get_profile(user): return f\"Welcome {user['name']}\""
+        },
+        {
+          "type": "heading",
+          "text": "Example 3: Timing Decorator"
+        },
+        {
+          "type": "paragraph",
+          "text": "import timedef timer(func): def wrapper(*args, **kwargs): start = time.time() result = func(*args, **kwargs) end = time.time() print(\"Time:\", end - start) return result return wrapper"
+        },
+        {
+          "type": "heading",
+          "text": "Example 4: Caching Decorator"
+        },
+        {
+          "type": "paragraph",
+          "text": "def cache(func): memory = {} def wrapper(x): if x in memory: return memory[x] result = func(x) memory[x] = result return result return wrapper"
+        },
+        {
+          "type": "heading",
+          "text": "Code Examples (Important Patterns)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 1: Input Validation"
+        },
+        {
+          "type": "paragraph",
+          "text": "def validate(func): def wrapper(x): if x < 0: return \"Invalid input\" return func(x) return wrapper"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 2: Role-Based Access"
+        },
+        {
+          "type": "paragraph",
+          "text": "def admin_only(func): def wrapper(user): if user.get(\"role\") != \"admin\": return \"Access denied\" return func(user) return wrapper"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 3: Retry Logic"
+        },
+        {
+          "type": "paragraph",
+          "text": "def retry(func): def wrapper(*args, **kwargs): for _ in range(3): try: return func(*args, **kwargs) except: continue return wrapper"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 4: Rate Limiting (Basic Idea)"
+        },
+        {
+          "type": "paragraph",
+          "text": "def rate_limit(func): calls = 0 def wrapper(*args, **kwargs): nonlocal calls if calls > 5: return \"Too many requests\" calls += 1 return func(*args, **kwargs) return wrapper"
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Forgetting *args, **kwargs"
+        },
+        {
+          "type": "subheading",
+          "text": "→ breaks function"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not returning result"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not using @wraps"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Confusing decorator levels"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Overusing decorators → complex code"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q1: What is a decorator?"
+        },
+        {
+          "type": "subheading",
+          "text": "Function that modifies another function without changing its code"
+        },
+        {
+          "type": "subheading",
+          "text": "Q2: How decorators work internally?"
+        },
+        {
+          "type": "subheading",
+          "text": "func = decorator(func)"
+        },
+        {
+          "type": "subheading",
+          "text": "Q3: Why use decorators?"
+        },
+        {
+          "type": "list",
+          "text": "Code reuse"
+        },
+        {
+          "type": "list",
+          "text": "Separation of concerns"
+        },
+        {
+          "type": "list",
+          "text": "Cleaner code"
+        },
+        {
+          "type": "subheading",
+          "text": "Q4: What is wrapper function?"
+        },
+        {
+          "type": "subheading",
+          "text": "Function inside decorator that adds extra behavior"
+        },
+        {
+          "type": "subheading",
+          "text": "Q5: Why use *args and **kwargs?"
+        },
+        {
+          "type": "subheading",
+          "text": "To support any function signature"
+        },
+        {
+          "type": "subheading",
+          "text": "Q6: What is @wraps?"
+        },
+        {
+          "type": "subheading",
+          "text": "Preserves metadata of original function"
+        },
+        {
+          "type": "subheading",
+          "text": "Q7: Can decorators take arguments?"
+        },
+        {
+          "type": "subheading",
+          "text": "Yes, using nested functions"
+        },
+        {
+          "type": "subheading",
+          "text": "Q8: Real-world use?"
+        },
+        {
+          "type": "list",
+          "text": "Authentication"
+        },
+        {
+          "type": "list",
+          "text": "Logging"
+        },
+        {
+          "type": "list",
+          "text": "Caching"
+        },
+        {
+          "type": "list",
+          "text": "Rate limiting"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "Decorator = function modifying another function"
+        },
+        {
+          "type": "list",
+          "text": "Syntax:"
+        },
+        {
+          "type": "subheading",
+          "text": "@decoratordef func():"
+        },
+        {
+          "type": "list",
+          "text": "Use *args, **kwargs for flexibility"
+        },
+        {
+          "type": "list",
+          "text": "Use @wraps for metadata"
+        },
+        {
+          "type": "list",
+          "text": "Types:"
+        },
+        {
+          "type": "list",
+          "text": "Basic decorator"
+        },
+        {
+          "type": "list",
+          "text": "Decorator with arguments"
+        },
+        {
+          "type": "list",
+          "text": "Decorator with parameters"
+        },
+        {
+          "type": "list",
+          "text": "Backend uses:"
+        },
+        {
+          "type": "list",
+          "text": "Auth"
+        },
+        {
+          "type": "list",
+          "text": "Logging"
+        },
+        {
+          "type": "list",
+          "text": "Caching"
+        },
+        {
+          "type": "list",
+          "text": "Middleware"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "slug": "chapter-04",
+      "title": "Object-Oriented Programming (OOP) in Python",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "(Classes, Inheritance, MRO, Encapsulation, Polymorphism, Dataclasses)"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "subheading",
+          "text": "In backend development, applications grow quickly:"
+        },
+        {
+          "type": "list",
+          "text": "Many modules"
+        },
+        {
+          "type": "list",
+          "text": "Complex business logic"
+        },
+        {
+          "type": "list",
+          "text": "Multiple APIs"
+        },
+        {
+          "type": "list",
+          "text": "Database layers"
+        },
+        {
+          "type": "paragraph",
+          "text": "To manage this complexity, we use Object-Oriented Programming (OOP)."
+        },
+        {
+          "type": "subheading",
+          "text": "👉 OOP helps in:"
+        },
+        {
+          "type": "list",
+          "text": "Structuring large applications"
+        },
+        {
+          "type": "list",
+          "text": "Writing reusable code"
+        },
+        {
+          "type": "list",
+          "text": "Managing data and behavior together"
+        },
+        {
+          "type": "list",
+          "text": "Designing scalable systems"
+        },
+        {
+          "type": "subheading",
+          "text": "In real backend systems:"
+        },
+        {
+          "type": "list",
+          "text": "Models → classes"
+        },
+        {
+          "type": "list",
+          "text": "Services → classes"
+        },
+        {
+          "type": "list",
+          "text": "Controllers → classes"
+        },
+        {
+          "type": "list",
+          "text": "ORM (SQLAlchemy) → class-based"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you don’t understand OOP:"
+        },
+        {
+          "type": "list",
+          "text": "Your code becomes messy and hard to scale"
+        },
+        {
+          "type": "list",
+          "text": "You struggle with frameworks"
+        },
+        {
+          "type": "list",
+          "text": "You fail system design + backend interviews"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you master OOP:"
+        },
+        {
+          "type": "list",
+          "text": "You can design clean architectures"
+        },
+        {
+          "type": "list",
+          "text": "You understand frameworks deeply"
+        },
+        {
+          "type": "list",
+          "text": "You can explain projects confidently in interviews"
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "Classes and Objects (Foundation)"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Class"
+        },
+        {
+          "type": "paragraph",
+          "text": "A class is a blueprint for creating objects."
+        },
+        {
+          "type": "subheading",
+          "text": "class User: pass"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Object"
+        },
+        {
+          "type": "paragraph",
+          "text": "An object is an instance of a class."
+        },
+        {
+          "type": "subheading",
+          "text": "user1 = User()"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Class with Attributes"
+        },
+        {
+          "type": "paragraph",
+          "text": "class User: def __init__(self, name, age): self.name = name self.age = ageuser1 = User(\"Ali\", 25)print(user1.name)"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Points:"
+        },
+        {
+          "type": "list",
+          "text": "__init__ → constructor"
+        },
+        {
+          "type": "list",
+          "text": "self → refers to current object"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Case:"
+        },
+        {
+          "type": "list",
+          "text": "Represent users, orders, products"
+        },
+        {
+          "type": "list",
+          "text": "Encapsulate data + behavior"
+        },
+        {
+          "type": "heading",
+          "text": "Methods (Behavior in Classes)"
+        },
+        {
+          "type": "subheading",
+          "text": "Instance Method"
+        },
+        {
+          "type": "paragraph",
+          "text": "class User: def __init__(self, name): self.name = name def greet(self): return f\"Hello {self.name}\""
+        },
+        {
+          "type": "subheading",
+          "text": "Class Method"
+        },
+        {
+          "type": "subheading",
+          "text": "class User: count = 0 @classmethod def increment(cls): cls.count += 1"
+        },
+        {
+          "type": "subheading",
+          "text": "Static Method"
+        },
+        {
+          "type": "subheading",
+          "text": "class Math: @staticmethod def add(a, b): return a + b"
+        },
+        {
+          "type": "subheading",
+          "text": "Differences:"
+        },
+        {
+          "type": "heading",
+          "text": "Encapsulation (Data Protection)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Encapsulation means hiding internal data and controlling access."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "class BankAccount: def __init__(self, balance): self._balance = balance # protected def deposit(self, amount): self._balance += amount def get_balance(self): return self._balance"
+        },
+        {
+          "type": "subheading",
+          "text": "Types of Access:"
+        },
+        {
+          "type": "subheading",
+          "text": "Why Important:"
+        },
+        {
+          "type": "list",
+          "text": "Prevent accidental changes"
+        },
+        {
+          "type": "list",
+          "text": "Secure data"
+        },
+        {
+          "type": "list",
+          "text": "Maintain integrity"
+        },
+        {
+          "type": "heading",
+          "text": "Inheritance (Code Reuse)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inheritance allows one class to reuse another class’s properties."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "class Animal: def speak(self): return \"Sound\"class Dog(Animal): def speak(self): return \"Bark\""
+        },
+        {
+          "type": "subheading",
+          "text": "Types of Inheritance:"
+        },
+        {
+          "type": "list",
+          "text": "Single"
+        },
+        {
+          "type": "list",
+          "text": "Multiple"
+        },
+        {
+          "type": "list",
+          "text": "Multilevel"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Case:"
+        },
+        {
+          "type": "list",
+          "text": "Base models"
+        },
+        {
+          "type": "list",
+          "text": "Shared logic"
+        },
+        {
+          "type": "list",
+          "text": "API base classes"
+        },
+        {
+          "type": "heading",
+          "text": "Method Resolution Order (MRO)"
+        },
+        {
+          "type": "paragraph",
+          "text": "MRO defines the order in which Python searches methods."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "class A: def show(self): print(\"A\")class B(A): passclass C(A): passclass D(B, C): passprint(D.mro())"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Idea:"
+        },
+        {
+          "type": "list",
+          "text": "Python uses C3 Linearization"
+        },
+        {
+          "type": "list",
+          "text": "Searches from left to right"
+        },
+        {
+          "type": "subheading",
+          "text": "Why Important:"
+        },
+        {
+          "type": "list",
+          "text": "Avoid confusion in multiple inheritance"
+        },
+        {
+          "type": "list",
+          "text": "Debug method conflicts"
+        },
+        {
+          "type": "heading",
+          "text": "Polymorphism (Same Interface, Different Behavior)"
+        },
+        {
+          "type": "subheading",
+          "text": "Polymorphism means:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Same method name → different behavior"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "class Dog: def speak(self): return \"Bark\"class Cat: def speak(self): return \"Meow\"def animal_sound(animal): print(animal.speak())"
+        },
+        {
+          "type": "subheading",
+          "text": "Output:"
+        },
+        {
+          "type": "subheading",
+          "text": "animal_sound(Dog())animal_sound(Cat())"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Case:"
+        },
+        {
+          "type": "list",
+          "text": "Different services with same interface"
+        },
+        {
+          "type": "list",
+          "text": "Plug-and-play architecture"
+        },
+        {
+          "type": "heading",
+          "text": "Dataclasses (Modern Python Feature)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dataclasses simplify class creation."
+        },
+        {
+          "type": "subheading",
+          "text": "Without Dataclass:"
+        },
+        {
+          "type": "subheading",
+          "text": "class User: def __init__(self, name, age): self.name = name self.age = age"
+        },
+        {
+          "type": "subheading",
+          "text": "With Dataclass:"
+        },
+        {
+          "type": "subheading",
+          "text": "from dataclasses import dataclass@dataclassclass User: name: str age: int"
+        },
+        {
+          "type": "subheading",
+          "text": "Benefits:"
+        },
+        {
+          "type": "list",
+          "text": "Less boilerplate"
+        },
+        {
+          "type": "list",
+          "text": "Auto-generated methods (__init__, __repr__)"
+        },
+        {
+          "type": "list",
+          "text": "Cleaner code"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Case:"
+        },
+        {
+          "type": "list",
+          "text": "Data transfer objects (DTOs)"
+        },
+        {
+          "type": "list",
+          "text": "API schemas"
+        },
+        {
+          "type": "list",
+          "text": "Config objects"
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 1: User Model"
+        },
+        {
+          "type": "paragraph",
+          "text": "class User: def __init__(self, name, email): self.name = name self.email = email def display(self): return f\"{self.name} ({self.email})\""
+        },
+        {
+          "type": "subheading",
+          "text": "Example 2: Service Layer"
+        },
+        {
+          "type": "subheading",
+          "text": "class UserService: def get_user(self, user_id): return {\"id\": user_id}"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 3: Base API Class"
+        },
+        {
+          "type": "paragraph",
+          "text": "class BaseAPI: def log(self): print(\"Logging request\")class UserAPI(BaseAPI): def get(self): return \"User data\""
+        },
+        {
+          "type": "subheading",
+          "text": "Example 4: Polymorphic Processing"
+        },
+        {
+          "type": "paragraph",
+          "text": "class Payment: def process(self): passclass CardPayment(Payment): def process(self): return \"Card processed\"class UPI(Payment): def process(self): return \"UPI processed\""
+        },
+        {
+          "type": "heading",
+          "text": "Code Examples (Important Patterns)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 1: Factory Pattern"
+        },
+        {
+          "type": "paragraph",
+          "text": "class User: def __init__(self, name): self.name = namedef create_user(name): return User(name)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 2: Singleton (Basic Idea)"
+        },
+        {
+          "type": "paragraph",
+          "text": "class Singleton: _instance = None def __new__(cls): if not cls._instance: cls._instance = super().__new__(cls) return cls._instance"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 3: Composition"
+        },
+        {
+          "type": "paragraph",
+          "text": "class Engine: def start(self): return \"Engine started\"class Car: def __init__(self): self.engine = Engine()"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 4: Method Override"
+        },
+        {
+          "type": "paragraph",
+          "text": "class Base: def show(self): return \"Base\"class Child(Base): def show(self): return \"Child\""
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Forgetting self"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Overusing inheritance"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not understanding MRO"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Using class variables incorrectly"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not using encapsulation"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Writing everything in one class"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q1: What is OOP?"
+        },
+        {
+          "type": "subheading",
+          "text": "Programming using classes and objects"
+        },
+        {
+          "type": "subheading",
+          "text": "Q2: Difference between class and object?"
+        },
+        {
+          "type": "list",
+          "text": "Class → blueprint"
+        },
+        {
+          "type": "list",
+          "text": "Object → instance"
+        },
+        {
+          "type": "subheading",
+          "text": "Q3: What is inheritance?"
+        },
+        {
+          "type": "subheading",
+          "text": "Reusing properties of parent class"
+        },
+        {
+          "type": "subheading",
+          "text": "Q4: What is polymorphism?"
+        },
+        {
+          "type": "subheading",
+          "text": "Same method, different behavior"
+        },
+        {
+          "type": "subheading",
+          "text": "Q5: What is encapsulation?"
+        },
+        {
+          "type": "subheading",
+          "text": "Hiding data and controlling access"
+        },
+        {
+          "type": "subheading",
+          "text": "Q6: What is MRO?"
+        },
+        {
+          "type": "subheading",
+          "text": "Order in which methods are resolved"
+        },
+        {
+          "type": "subheading",
+          "text": "Q7: What is dataclass?"
+        },
+        {
+          "type": "subheading",
+          "text": "Simplified class with auto-generated methods"
+        },
+        {
+          "type": "subheading",
+          "text": "Q8: Why use OOP in backend?"
+        },
+        {
+          "type": "list",
+          "text": "Scalability"
+        },
+        {
+          "type": "list",
+          "text": "Maintainability"
+        },
+        {
+          "type": "list",
+          "text": "Clean structure"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "Class → blueprint"
+        },
+        {
+          "type": "list",
+          "text": "Object → instance"
+        },
+        {
+          "type": "list",
+          "text": "Encapsulation → protect data"
+        },
+        {
+          "type": "list",
+          "text": "Inheritance → reuse code"
+        },
+        {
+          "type": "list",
+          "text": "Polymorphism → flexible behavior"
+        },
+        {
+          "type": "list",
+          "text": "MRO → method lookup order"
+        },
+        {
+          "type": "list",
+          "text": "Dataclass → cleaner class creation"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "slug": "chapter-05",
+      "title": "Async Programming in Python",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "(Event Loop, async/await, asyncio vs Threading vs Multiprocessing)"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "subheading",
+          "text": "Modern backend systems handle:"
+        },
+        {
+          "type": "list",
+          "text": "Thousands of users"
+        },
+        {
+          "type": "list",
+          "text": "Multiple API requests at the same time"
+        },
+        {
+          "type": "list",
+          "text": "Database calls"
+        },
+        {
+          "type": "list",
+          "text": "External API calls"
+        },
+        {
+          "type": "subheading",
+          "text": "If your backend processes requests one by one, it becomes:"
+        },
+        {
+          "type": "list",
+          "text": "Slow"
+        },
+        {
+          "type": "list",
+          "text": "Unresponsive"
+        },
+        {
+          "type": "list",
+          "text": "Not scalable"
+        },
+        {
+          "type": "paragraph",
+          "text": "👉 This is where asynchronous programming (async) comes in."
+        },
+        {
+          "type": "paragraph",
+          "text": "Frameworks like FastAPI are fast because they use async."
+        },
+        {
+          "type": "subheading",
+          "text": "Real Backend Scenario:"
+        },
+        {
+          "type": "subheading",
+          "text": "Imagine:"
+        },
+        {
+          "type": "list",
+          "text": "100 users request data"
+        },
+        {
+          "type": "list",
+          "text": "Each request waits for database (1 second)"
+        },
+        {
+          "type": "subheading",
+          "text": "Without async:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Total time ≈ 100 seconds"
+        },
+        {
+          "type": "subheading",
+          "text": "With async:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Total time ≈ ~1 second (concurrent execution)"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you don’t understand async:"
+        },
+        {
+          "type": "list",
+          "text": "You cannot build high-performance APIs"
+        },
+        {
+          "type": "list",
+          "text": "You will fail backend interviews"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you master async:"
+        },
+        {
+          "type": "list",
+          "text": "You build fast and scalable systems"
+        },
+        {
+          "type": "list",
+          "text": "You understand modern backend frameworks"
+        },
+        {
+          "type": "list",
+          "text": "You stand out in interviews"
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "Synchronous vs Asynchronous Programming"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Synchronous (Blocking)"
+        },
+        {
+          "type": "subheading",
+          "text": "Tasks run one after another"
+        },
+        {
+          "type": "subheading",
+          "text": "import timedef task(): time.sleep(2) print(\"Done\")task()task()"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Total time = 4 seconds"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Asynchronous (Non-Blocking)"
+        },
+        {
+          "type": "subheading",
+          "text": "Tasks run concurrently"
+        },
+        {
+          "type": "subheading",
+          "text": "import asyncioasync def task(): await asyncio.sleep(2) print(\"Done\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Idea:"
+        },
+        {
+          "type": "list",
+          "text": "sleep() → blocks execution"
+        },
+        {
+          "type": "list",
+          "text": "await → allows other tasks to run"
+        },
+        {
+          "type": "heading",
+          "text": "Event Loop (Heart of Async)"
+        },
+        {
+          "type": "paragraph",
+          "text": "The event loop is the engine that runs async code."
+        },
+        {
+          "type": "subheading",
+          "text": "👉 It:"
+        },
+        {
+          "type": "list",
+          "text": "Schedules tasks"
+        },
+        {
+          "type": "list",
+          "text": "Switches between tasks"
+        },
+        {
+          "type": "list",
+          "text": "Executes coroutines"
+        },
+        {
+          "type": "subheading",
+          "text": "Simple Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import asyncioasync def main(): print(\"Start\") await asyncio.sleep(1) print(\"End\")asyncio.run(main())"
+        },
+        {
+          "type": "subheading",
+          "text": "Internal Concept:"
+        },
+        {
+          "type": "list",
+          "text": "Tasks are queued"
+        },
+        {
+          "type": "list",
+          "text": "Event loop runs them efficiently"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "FastAPI runs on event loop"
+        },
+        {
+          "type": "list",
+          "text": "Handles multiple requests concurrently"
+        },
+        {
+          "type": "heading",
+          "text": "async and await (Core Syntax)"
+        },
+        {
+          "type": "subheading",
+          "text": "async"
+        },
+        {
+          "type": "subheading",
+          "text": "Defines a coroutine (async function)"
+        },
+        {
+          "type": "subheading",
+          "text": "async def fetch(): return \"data\""
+        },
+        {
+          "type": "subheading",
+          "text": "await"
+        },
+        {
+          "type": "subheading",
+          "text": "Used to pause execution until result is ready"
+        },
+        {
+          "type": "subheading",
+          "text": "async def main(): result = await fetch()"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Rules:"
+        },
+        {
+          "type": "list",
+          "text": "await only inside async def"
+        },
+        {
+          "type": "list",
+          "text": "Always await async calls"
+        },
+        {
+          "type": "heading",
+          "text": "Running Multiple Tasks (Concurrency)"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import asyncioasync def task1(): await asyncio.sleep(2) print(\"Task 1 done\")async def task2(): await asyncio.sleep(2) print(\"Task 2 done\")async def main(): await asyncio.gather(task1(), task2())asyncio.run(main())"
+        },
+        {
+          "type": "subheading",
+          "text": "Output:"
+        },
+        {
+          "type": "list",
+          "text": "Both tasks finish in ~2 seconds"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Idea:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Concurrency ≠ Parallelism"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Tasks run “together” but not truly simultaneously"
+        },
+        {
+          "type": "heading",
+          "text": "asyncio (Async Framework in Python)"
+        },
+        {
+          "type": "paragraph",
+          "text": "asyncio is Python’s built-in async library."
+        },
+        {
+          "type": "subheading",
+          "text": "Features:"
+        },
+        {
+          "type": "list",
+          "text": "Event loop"
+        },
+        {
+          "type": "list",
+          "text": "Coroutines"
+        },
+        {
+          "type": "list",
+          "text": "Task scheduling"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import asyncioasync def main(): print(\"Start\") await asyncio.sleep(1) print(\"End\")asyncio.run(main())"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Cases:"
+        },
+        {
+          "type": "list",
+          "text": "API calls"
+        },
+        {
+          "type": "list",
+          "text": "Database queries"
+        },
+        {
+          "type": "list",
+          "text": "File I/O"
+        },
+        {
+          "type": "list",
+          "text": "Network operations"
+        },
+        {
+          "type": "heading",
+          "text": "Threading vs Multiprocessing vs Async"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Threading"
+        },
+        {
+          "type": "list",
+          "text": "Multiple threads"
+        },
+        {
+          "type": "list",
+          "text": "Shared memory"
+        },
+        {
+          "type": "list",
+          "text": "Good for I/O tasks"
+        },
+        {
+          "type": "subheading",
+          "text": "import threading"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Multiprocessing"
+        },
+        {
+          "type": "list",
+          "text": "Multiple processes"
+        },
+        {
+          "type": "list",
+          "text": "Separate memory"
+        },
+        {
+          "type": "list",
+          "text": "Good for CPU-heavy tasks"
+        },
+        {
+          "type": "subheading",
+          "text": "import multiprocessing"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 Async"
+        },
+        {
+          "type": "list",
+          "text": "Single thread"
+        },
+        {
+          "type": "list",
+          "text": "Event loop"
+        },
+        {
+          "type": "list",
+          "text": "Best for I/O tasks"
+        },
+        {
+          "type": "subheading",
+          "text": "Comparison Table:"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Async → APIs, DB calls"
+        },
+        {
+          "type": "list",
+          "text": "Threading → legacy systems"
+        },
+        {
+          "type": "list",
+          "text": "Multiprocessing → heavy computation"
+        },
+        {
+          "type": "heading",
+          "text": "Blocking vs Non-Blocking (Critical Concept)"
+        },
+        {
+          "type": "subheading",
+          "text": "Blocking Code:"
+        },
+        {
+          "type": "subheading",
+          "text": "import timetime.sleep(2) # blocks"
+        },
+        {
+          "type": "subheading",
+          "text": "Non-Blocking Code:"
+        },
+        {
+          "type": "subheading",
+          "text": "await asyncio.sleep(2) # non-blocking"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Importance:"
+        },
+        {
+          "type": "list",
+          "text": "Blocking → slows entire server"
+        },
+        {
+          "type": "list",
+          "text": "Non-blocking → handles multiple users"
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 1: API Call Simulation"
+        },
+        {
+          "type": "subheading",
+          "text": "import asyncioasync def fetch_data(): await asyncio.sleep(2) return \"data\""
+        },
+        {
+          "type": "subheading",
+          "text": "Example 2: Multiple Requests"
+        },
+        {
+          "type": "paragraph",
+          "text": "async def main(): results = await asyncio.gather( fetch_data(), fetch_data(), fetch_data() )"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 3: FastAPI Style"
+        },
+        {
+          "type": "subheading",
+          "text": "async def get_user(): return {\"name\": \"Ali\"}"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 4: Database Simulation"
+        },
+        {
+          "type": "subheading",
+          "text": "async def fetch_from_db(): await asyncio.sleep(1) return \"DB data\""
+        },
+        {
+          "type": "heading",
+          "text": "Code Examples (Important Patterns)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 1: Parallel API Calls"
+        },
+        {
+          "type": "paragraph",
+          "text": "async def main(): tasks = [fetch_data() for _ in range(5)] results = await asyncio.gather(*tasks)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 2: Timeout Handling"
+        },
+        {
+          "type": "paragraph",
+          "text": "try: await asyncio.wait_for(fetch_data(), timeout=2)except asyncio.TimeoutError: print(\"Timeout\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 3: Background Task"
+        },
+        {
+          "type": "subheading",
+          "text": "async def background(): while True: print(\"Running\") await asyncio.sleep(1)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 4: Async Queue"
+        },
+        {
+          "type": "subheading",
+          "text": "queue = asyncio.Queue()await queue.put(\"task\")"
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Using time.sleep() in async code"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 blocks event loop"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Forgetting await"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Mixing sync and async incorrectly"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ CPU-heavy tasks in async"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 should use multiprocessing"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not understanding concurrency vs parallelism"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q1: What is async programming?"
+        },
+        {
+          "type": "subheading",
+          "text": "Non-blocking execution of tasks"
+        },
+        {
+          "type": "subheading",
+          "text": "Q2: What is event loop?"
+        },
+        {
+          "type": "subheading",
+          "text": "Engine that runs async tasks"
+        },
+        {
+          "type": "subheading",
+          "text": "Q3: Difference between async and threading?"
+        },
+        {
+          "type": "list",
+          "text": "Async → single thread"
+        },
+        {
+          "type": "list",
+          "text": "Threading → multiple threads"
+        },
+        {
+          "type": "subheading",
+          "text": "Q4: What is await?"
+        },
+        {
+          "type": "subheading",
+          "text": "Pauses execution until result is ready"
+        },
+        {
+          "type": "subheading",
+          "text": "Q5: What is asyncio?"
+        },
+        {
+          "type": "subheading",
+          "text": "Python library for async programming"
+        },
+        {
+          "type": "subheading",
+          "text": "Q6: When to use async?"
+        },
+        {
+          "type": "list",
+          "text": "I/O tasks"
+        },
+        {
+          "type": "list",
+          "text": "API calls"
+        },
+        {
+          "type": "list",
+          "text": "DB operations"
+        },
+        {
+          "type": "subheading",
+          "text": "Q7: What is blocking vs non-blocking?"
+        },
+        {
+          "type": "list",
+          "text": "Blocking → stops execution"
+        },
+        {
+          "type": "list",
+          "text": "Non-blocking → allows other tasks"
+        },
+        {
+          "type": "subheading",
+          "text": "Q8: Can async run CPU-heavy tasks?"
+        },
+        {
+          "type": "subheading",
+          "text": "No, use multiprocessing"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "Async = non-blocking execution"
+        },
+        {
+          "type": "list",
+          "text": "Event loop = manages tasks"
+        },
+        {
+          "type": "list",
+          "text": "async → defines coroutine"
+        },
+        {
+          "type": "list",
+          "text": "await → waits without blocking"
+        },
+        {
+          "type": "list",
+          "text": "Use asyncio.gather() for concurrency"
+        },
+        {
+          "type": "list",
+          "text": "Async best for:"
+        },
+        {
+          "type": "list",
+          "text": "API calls"
+        },
+        {
+          "type": "list",
+          "text": "DB queries"
+        },
+        {
+          "type": "list",
+          "text": "Network tasks"
+        },
+        {
+          "type": "list",
+          "text": "Avoid:"
+        },
+        {
+          "type": "list",
+          "text": "blocking calls"
+        },
+        {
+          "type": "list",
+          "text": "missing await"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "slug": "chapter-06",
+      "title": "Error Handling & Logging",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "(try/except, Custom Exceptions, Logging System)"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend systems run continuously and handle:"
+        },
+        {
+          "type": "list",
+          "text": "User requests"
+        },
+        {
+          "type": "list",
+          "text": "Database operations"
+        },
+        {
+          "type": "list",
+          "text": "External API calls"
+        },
+        {
+          "type": "list",
+          "text": "File processing"
+        },
+        {
+          "type": "subheading",
+          "text": "In real-world systems, errors are unavoidable:"
+        },
+        {
+          "type": "list",
+          "text": "Database connection fails"
+        },
+        {
+          "type": "list",
+          "text": "Invalid user input"
+        },
+        {
+          "type": "list",
+          "text": "API timeout"
+        },
+        {
+          "type": "list",
+          "text": "Unexpected bugs"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If errors are not handled properly:"
+        },
+        {
+          "type": "list",
+          "text": "Your application crashes"
+        },
+        {
+          "type": "list",
+          "text": "Users get poor experience"
+        },
+        {
+          "type": "list",
+          "text": "Debugging becomes difficult"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Logging is equally important:"
+        },
+        {
+          "type": "list",
+          "text": "Helps track issues"
+        },
+        {
+          "type": "list",
+          "text": "Helps monitor system behavior"
+        },
+        {
+          "type": "list",
+          "text": "Helps in production debugging"
+        },
+        {
+          "type": "subheading",
+          "text": "Real Backend Scenario:"
+        },
+        {
+          "type": "subheading",
+          "text": "A user sends wrong data:"
+        },
+        {
+          "type": "list",
+          "text": "Without error handling → server crashes"
+        },
+        {
+          "type": "list",
+          "text": "With error handling → meaningful response returned"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Backend goal:"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Handle errors gracefully"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Never crash the system"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Log everything important"
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "What is an Exception?"
+        },
+        {
+          "type": "paragraph",
+          "text": "An exception is an error that occurs during program execution."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "x = 10 / 0 # ZeroDivisionError"
+        },
+        {
+          "type": "subheading",
+          "text": "Common Exceptions:"
+        },
+        {
+          "type": "heading",
+          "text": "try / except (Basic Error Handling)"
+        },
+        {
+          "type": "subheading",
+          "text": "Syntax:"
+        },
+        {
+          "type": "subheading",
+          "text": "try: risky_codeexcept Exception: handle_error"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "try: x = int(\"abc\")except ValueError: print(\"Invalid number\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Multiple Exceptions:"
+        },
+        {
+          "type": "paragraph",
+          "text": "try: x = int(\"abc\")except ValueError: print(\"Value error\")except TypeError: print(\"Type error\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Catch All Exception:"
+        },
+        {
+          "type": "subheading",
+          "text": "try: x = 10 / 0except Exception as e: print(e)"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Always catch specific exceptions first"
+        },
+        {
+          "type": "list",
+          "text": "Use general exception only when needed"
+        },
+        {
+          "type": "heading",
+          "text": "else and finally (Advanced Flow Control)"
+        },
+        {
+          "type": "subheading",
+          "text": "else block"
+        },
+        {
+          "type": "subheading",
+          "text": "Runs when no exception occurs"
+        },
+        {
+          "type": "subheading",
+          "text": "try: x = 10 / 2except: print(\"Error\")else: print(\"Success\")"
+        },
+        {
+          "type": "subheading",
+          "text": "finally block"
+        },
+        {
+          "type": "subheading",
+          "text": "Runs always (cleanup code)"
+        },
+        {
+          "type": "paragraph",
+          "text": "try: file = open(\"test.txt\")except: print(\"Error\")finally: print(\"Closing resources\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use:"
+        },
+        {
+          "type": "list",
+          "text": "Closing DB connections"
+        },
+        {
+          "type": "list",
+          "text": "Releasing resources"
+        },
+        {
+          "type": "list",
+          "text": "Logging completion"
+        },
+        {
+          "type": "heading",
+          "text": "Raising Exceptions (raise keyword)"
+        },
+        {
+          "type": "paragraph",
+          "text": "You can manually raise exceptions."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def withdraw(amount): if amount < 0: raise ValueError(\"Invalid amount\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Why Important:"
+        },
+        {
+          "type": "list",
+          "text": "Enforce business rules"
+        },
+        {
+          "type": "list",
+          "text": "Validate data"
+        },
+        {
+          "type": "heading",
+          "text": "Custom Exceptions (Very Important)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Custom exceptions allow creating meaningful error types."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "class InsufficientBalance(Exception): passdef withdraw(balance, amount): if amount > balance: raise InsufficientBalance(\"Not enough money\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Cases:"
+        },
+        {
+          "type": "list",
+          "text": "Payment errors"
+        },
+        {
+          "type": "list",
+          "text": "Authentication errors"
+        },
+        {
+          "type": "list",
+          "text": "Validation errors"
+        },
+        {
+          "type": "heading",
+          "text": "Logging (Critical in Production)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Printing is not enough in backend systems."
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Use logging instead"
+        },
+        {
+          "type": "subheading",
+          "text": "Basic Logging:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import logginglogging.basicConfig(level=logging.INFO)logging.info(\"App started\")logging.error(\"Something failed\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Logging Levels:"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "logging.debug(\"Debug info\")logging.warning(\"Warning message\")"
+        },
+        {
+          "type": "heading",
+          "text": "Logging to File"
+        },
+        {
+          "type": "paragraph",
+          "text": "logging.basicConfig( filename=\"app.log\", level=logging.INFO)logging.info(\"Saved to file\")"
+        },
+        {
+          "type": "heading",
+          "text": "Structured Logging (Backend Best Practice)"
+        },
+        {
+          "type": "subheading",
+          "text": "Instead of plain text:"
+        },
+        {
+          "type": "subheading",
+          "text": "logging.info(f\"User {user_id} logged in\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Better approach:"
+        },
+        {
+          "type": "list",
+          "text": "Include context"
+        },
+        {
+          "type": "list",
+          "text": "Use JSON logging (advanced systems)"
+        },
+        {
+          "type": "heading",
+          "text": "Exception Handling + Logging Together"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import loggingdef divide(a, b): try: return a / b except Exception as e: logging.error(f\"Error: {e}\") return None"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Always log errors"
+        },
+        {
+          "type": "list",
+          "text": "Never silently ignore exceptions"
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 1: API Error Handling"
+        },
+        {
+          "type": "paragraph",
+          "text": "def get_user(user_id): try: return {\"id\": user_id} except Exception: return {\"error\": \"User not found\"}"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 2: Database Error Handling"
+        },
+        {
+          "type": "paragraph",
+          "text": "def fetch_data(): try: # simulate DB call raise Exception(\"DB error\") except Exception as e: logging.error(e)"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 3: Validation"
+        },
+        {
+          "type": "subheading",
+          "text": "def validate_age(age): if age < 0: raise ValueError(\"Age cannot be negative\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 4: Logging User Activity"
+        },
+        {
+          "type": "subheading",
+          "text": "def login(user): logging.info(f\"{user} logged in\")"
+        },
+        {
+          "type": "heading",
+          "text": "Code Examples (Important Patterns)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 1: Safe Execution Wrapper"
+        },
+        {
+          "type": "paragraph",
+          "text": "def safe_execute(func): try: return func() except Exception as e: logging.error(e)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 2: Retry Mechanism"
+        },
+        {
+          "type": "subheading",
+          "text": "def retry(func): for _ in range(3): try: return func() except: continue"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 3: Input Validation"
+        },
+        {
+          "type": "paragraph",
+          "text": "def process(age): if not isinstance(age, int): raise TypeError(\"Age must be integer\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 4: Graceful API Response"
+        },
+        {
+          "type": "paragraph",
+          "text": "def api_handler(): try: return {\"data\": \"success\"} except: return {\"error\": \"failed\"}"
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Using bare except"
+        },
+        {
+          "type": "subheading",
+          "text": "except: pass # ❌ hides errors"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not logging errors"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Catching too broad exceptions"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Ignoring exceptions silently"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Using print instead of logging"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q1: What is exception handling?"
+        },
+        {
+          "type": "subheading",
+          "text": "Handling runtime errors without crashing program"
+        },
+        {
+          "type": "subheading",
+          "text": "Q2: Difference between error and exception?"
+        },
+        {
+          "type": "list",
+          "text": "Error → severe problem"
+        },
+        {
+          "type": "list",
+          "text": "Exception → can be handled"
+        },
+        {
+          "type": "subheading",
+          "text": "Q3: What is finally block?"
+        },
+        {
+          "type": "subheading",
+          "text": "Always executes, used for cleanup"
+        },
+        {
+          "type": "subheading",
+          "text": "Q4: What is raise?"
+        },
+        {
+          "type": "subheading",
+          "text": "Used to manually throw exception"
+        },
+        {
+          "type": "subheading",
+          "text": "Q5: Why use custom exceptions?"
+        },
+        {
+          "type": "subheading",
+          "text": "Better readability and control"
+        },
+        {
+          "type": "subheading",
+          "text": "Q6: Why logging is important?"
+        },
+        {
+          "type": "list",
+          "text": "Debugging"
+        },
+        {
+          "type": "list",
+          "text": "Monitoring"
+        },
+        {
+          "type": "list",
+          "text": "Production tracking"
+        },
+        {
+          "type": "subheading",
+          "text": "Q7: Difference between logging and print?"
+        },
+        {
+          "type": "list",
+          "text": "logging → structured, configurable"
+        },
+        {
+          "type": "list",
+          "text": "print → simple output"
+        },
+        {
+          "type": "subheading",
+          "text": "Q8: What are logging levels?"
+        },
+        {
+          "type": "subheading",
+          "text": "DEBUG, INFO, WARNING, ERROR, CRITICAL"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "Exception = runtime error"
+        },
+        {
+          "type": "list",
+          "text": "Use:"
+        },
+        {
+          "type": "list",
+          "text": "try → risky code"
+        },
+        {
+          "type": "list",
+          "text": "except → handle error"
+        },
+        {
+          "type": "list",
+          "text": "finally → cleanup"
+        },
+        {
+          "type": "list",
+          "text": "Raise exceptions for validation"
+        },
+        {
+          "type": "list",
+          "text": "Custom exceptions improve clarity"
+        },
+        {
+          "type": "list",
+          "text": "Logging is essential for backend"
+        },
+        {
+          "type": "list",
+          "text": "Use logging instead of print"
+        },
+        {
+          "type": "list",
+          "text": "Never ignore errors silently"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "slug": "chapter-07",
+      "title": "Type Hints & Pydantic",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "(Type Annotations, Data Validation, Pydantic Models)"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend systems deal with data everywhere:"
+        },
+        {
+          "type": "list",
+          "text": "API requests"
+        },
+        {
+          "type": "list",
+          "text": "Database records"
+        },
+        {
+          "type": "list",
+          "text": "JSON payloads"
+        },
+        {
+          "type": "list",
+          "text": "User inputs"
+        },
+        {
+          "type": "subheading",
+          "text": "If data is not validated properly:"
+        },
+        {
+          "type": "list",
+          "text": "Bugs increase"
+        },
+        {
+          "type": "list",
+          "text": "Security risks appear"
+        },
+        {
+          "type": "list",
+          "text": "APIs break"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Type hints and validation help:"
+        },
+        {
+          "type": "list",
+          "text": "Write clean and predictable code"
+        },
+        {
+          "type": "list",
+          "text": "Catch errors early"
+        },
+        {
+          "type": "list",
+          "text": "Improve readability"
+        },
+        {
+          "type": "list",
+          "text": "Enable better tooling (IDE, linters)"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Pydantic (used in FastAPI) is one of the most powerful tools for:"
+        },
+        {
+          "type": "list",
+          "text": "Data validation"
+        },
+        {
+          "type": "list",
+          "text": "Data parsing"
+        },
+        {
+          "type": "list",
+          "text": "Schema definition"
+        },
+        {
+          "type": "subheading",
+          "text": "Real Backend Scenario:"
+        },
+        {
+          "type": "subheading",
+          "text": "User sends API request:"
+        },
+        {
+          "type": "subheading",
+          "text": "{ \"name\": \"Ali\", \"age\": \"twenty\"}"
+        },
+        {
+          "type": "subheading",
+          "text": "Without validation:"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ System may crash"
+        },
+        {
+          "type": "subheading",
+          "text": "With Pydantic:"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Error handled automatically"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you don’t understand this:"
+        },
+        {
+          "type": "list",
+          "text": "You cannot build production APIs"
+        },
+        {
+          "type": "list",
+          "text": "You will struggle with FastAPI"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you master this:"
+        },
+        {
+          "type": "list",
+          "text": "You write safe and reliable backend systems"
+        },
+        {
+          "type": "list",
+          "text": "You pass backend interviews easily"
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "Type Hints (Type Annotations)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Type hints allow you to specify data types of variables and functions."
+        },
+        {
+          "type": "subheading",
+          "text": "Basic Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def add(a: int, b: int) -> int: return a + b"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Points:"
+        },
+        {
+          "type": "list",
+          "text": "a: int → parameter type"
+        },
+        {
+          "type": "list",
+          "text": "-> int → return type"
+        },
+        {
+          "type": "subheading",
+          "text": "Important:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Python does NOT enforce types at runtime"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 It is used for:"
+        },
+        {
+          "type": "list",
+          "text": "Readability"
+        },
+        {
+          "type": "list",
+          "text": "Static checking"
+        },
+        {
+          "type": "list",
+          "text": "IDE support"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def greet(name: str) -> str: return f\"Hello {name}\""
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use:"
+        },
+        {
+          "type": "list",
+          "text": "API inputs"
+        },
+        {
+          "type": "list",
+          "text": "Function contracts"
+        },
+        {
+          "type": "list",
+          "text": "Data processing"
+        },
+        {
+          "type": "heading",
+          "text": "Common Type Hints"
+        },
+        {
+          "type": "subheading",
+          "text": "Basic Types:"
+        },
+        {
+          "type": "subheading",
+          "text": "x: int = 10name: str = \"Ali\"price: float = 10.5"
+        },
+        {
+          "type": "subheading",
+          "text": "List:"
+        },
+        {
+          "type": "subheading",
+          "text": "from typing import Listnumbers: List[int] = [1, 2, 3]"
+        },
+        {
+          "type": "subheading",
+          "text": "Dictionary:"
+        },
+        {
+          "type": "subheading",
+          "text": "from typing import Dictuser: Dict[str, int] = {\"age\": 25}"
+        },
+        {
+          "type": "subheading",
+          "text": "Tuple:"
+        },
+        {
+          "type": "subheading",
+          "text": "from typing import Tuplecoords: Tuple[int, int] = (10, 20)"
+        },
+        {
+          "type": "subheading",
+          "text": "Optional:"
+        },
+        {
+          "type": "subheading",
+          "text": "from typing import Optionalname: Optional[str] = None"
+        },
+        {
+          "type": "subheading",
+          "text": "Union:"
+        },
+        {
+          "type": "subheading",
+          "text": "from typing import Unionvalue: Union[int, str]"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Helps define API schemas"
+        },
+        {
+          "type": "list",
+          "text": "Improves maintainability"
+        },
+        {
+          "type": "heading",
+          "text": "Type Hinting Functions (Advanced)"
+        },
+        {
+          "type": "subheading",
+          "text": "Default Values:"
+        },
+        {
+          "type": "subheading",
+          "text": "def greet(name: str = \"Guest\") -> str: return f\"Hello {name}\""
+        },
+        {
+          "type": "subheading",
+          "text": "Multiple Types:"
+        },
+        {
+          "type": "subheading",
+          "text": "def process(value: int | str): print(value)"
+        },
+        {
+          "type": "subheading",
+          "text": "Function as Type:"
+        },
+        {
+          "type": "paragraph",
+          "text": "from typing import Callabledef execute(func: Callable[[int], int]): return func(10)"
+        },
+        {
+          "type": "heading",
+          "text": "Why Type Hints Matter in Backend"
+        },
+        {
+          "type": "subheading",
+          "text": "Benefits:"
+        },
+        {
+          "type": "list",
+          "text": "Better readability"
+        },
+        {
+          "type": "list",
+          "text": "Easy debugging"
+        },
+        {
+          "type": "list",
+          "text": "Early error detection"
+        },
+        {
+          "type": "list",
+          "text": "IDE auto-completion"
+        },
+        {
+          "type": "list",
+          "text": "Clean API design"
+        },
+        {
+          "type": "subheading",
+          "text": "Example (Without Type Hint):"
+        },
+        {
+          "type": "subheading",
+          "text": "def process(data): return data + 1"
+        },
+        {
+          "type": "subheading",
+          "text": "With Type Hint:"
+        },
+        {
+          "type": "subheading",
+          "text": "def process(data: int) -> int: return data + 1"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Much clearer for developers"
+        },
+        {
+          "type": "heading",
+          "text": "Pydantic (Core Backend Tool)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pydantic is used for:"
+        },
+        {
+          "type": "list",
+          "text": "Data validation"
+        },
+        {
+          "type": "list",
+          "text": "Data parsing"
+        },
+        {
+          "type": "list",
+          "text": "Type enforcement"
+        },
+        {
+          "type": "subheading",
+          "text": "Basic Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "from pydantic import BaseModelclass User(BaseModel): name: str age: int"
+        },
+        {
+          "type": "subheading",
+          "text": "Usage:"
+        },
+        {
+          "type": "subheading",
+          "text": "user = User(name=\"Ali\", age=25)print(user.name)"
+        },
+        {
+          "type": "subheading",
+          "text": "Invalid Data:"
+        },
+        {
+          "type": "subheading",
+          "text": "User(name=\"Ali\", age=\"abc\") # ❌ error"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Pydantic automatically validates"
+        },
+        {
+          "type": "heading",
+          "text": "Default Values and Validation"
+        },
+        {
+          "type": "subheading",
+          "text": "class User(BaseModel): name: str age: int = 18"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "user = User(name=\"Ali\")print(user.age) # 18"
+        },
+        {
+          "type": "heading",
+          "text": "Field Validation (Advanced)"
+        },
+        {
+          "type": "paragraph",
+          "text": "from pydantic import BaseModel, Fieldclass User(BaseModel): age: int = Field(gt=0)"
+        },
+        {
+          "type": "subheading",
+          "text": "Meaning:"
+        },
+        {
+          "type": "list",
+          "text": "gt=0 → age must be greater than 0"
+        },
+        {
+          "type": "heading",
+          "text": "Custom Validation"
+        },
+        {
+          "type": "paragraph",
+          "text": "from pydantic import validatorclass User(BaseModel): name: str @validator(\"name\") def validate_name(cls, v): if len(v) < 3: raise ValueError(\"Too short\") return v"
+        },
+        {
+          "type": "heading",
+          "text": "Nested Models"
+        },
+        {
+          "type": "paragraph",
+          "text": "class Address(BaseModel): city: strclass User(BaseModel): name: str address: Address"
+        },
+        {
+          "type": "heading",
+          "text": "Pydantic in FastAPI (Real Use)"
+        },
+        {
+          "type": "paragraph",
+          "text": "from fastapi import FastAPIapp = FastAPI()class User(BaseModel): name: str age: int@app.post(\"/user\")def create_user(user: User): return user"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 FastAPI automatically:"
+        },
+        {
+          "type": "list",
+          "text": "Validates input"
+        },
+        {
+          "type": "list",
+          "text": "Returns error if invalid"
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 1: API Request Validation"
+        },
+        {
+          "type": "subheading",
+          "text": "class Login(BaseModel): username: str password: str"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 2: E-commerce Product"
+        },
+        {
+          "type": "subheading",
+          "text": "class Product(BaseModel): name: str price: float"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 3: Optional Fields"
+        },
+        {
+          "type": "subheading",
+          "text": "class User(BaseModel): name: str email: Optional[str] = None"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 4: Response Model"
+        },
+        {
+          "type": "subheading",
+          "text": "class Response(BaseModel): status: str data: dict"
+        },
+        {
+          "type": "heading",
+          "text": "Code Examples (Important Patterns)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 1: Safe Input Handling"
+        },
+        {
+          "type": "subheading",
+          "text": "def process(age: int): return age + 1"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 2: Data Transformation"
+        },
+        {
+          "type": "subheading",
+          "text": "class User(BaseModel): name: struser = User(name=\"Ali\")print(user.dict())"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 3: Validation Layer"
+        },
+        {
+          "type": "subheading",
+          "text": "def validate(user: User): return True"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 4: Default Config"
+        },
+        {
+          "type": "subheading",
+          "text": "class Config(BaseModel): debug: bool = False"
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Thinking type hints enforce types"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not using Pydantic in APIs"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Overcomplicating validation"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Forgetting Optional"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not validating nested data"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q1: What are type hints?"
+        },
+        {
+          "type": "subheading",
+          "text": "Annotations for variable types"
+        },
+        {
+          "type": "subheading",
+          "text": "Q2: Are type hints enforced?"
+        },
+        {
+          "type": "subheading",
+          "text": "No (unless using tools)"
+        },
+        {
+          "type": "subheading",
+          "text": "Q3: What is Pydantic?"
+        },
+        {
+          "type": "subheading",
+          "text": "Library for data validation and parsing"
+        },
+        {
+          "type": "subheading",
+          "text": "Q4: Why Pydantic is used in FastAPI?"
+        },
+        {
+          "type": "subheading",
+          "text": "Automatic validation of request data"
+        },
+        {
+          "type": "subheading",
+          "text": "Q5: What is Optional?"
+        },
+        {
+          "type": "subheading",
+          "text": "Value can be None"
+        },
+        {
+          "type": "subheading",
+          "text": "Q6: Difference between Union and Optional?"
+        },
+        {
+          "type": "list",
+          "text": "Optional = Union[type, None]"
+        },
+        {
+          "type": "subheading",
+          "text": "Q7: What is BaseModel?"
+        },
+        {
+          "type": "subheading",
+          "text": "Base class for Pydantic models"
+        },
+        {
+          "type": "subheading",
+          "text": "Q8: What happens on invalid data?"
+        },
+        {
+          "type": "subheading",
+          "text": "Validation error is raised"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "Type hints improve readability"
+        },
+        {
+          "type": "list",
+          "text": "Not enforced at runtime"
+        },
+        {
+          "type": "list",
+          "text": "Used for:"
+        },
+        {
+          "type": "list",
+          "text": "API design"
+        },
+        {
+          "type": "list",
+          "text": "Debugging"
+        },
+        {
+          "type": "list",
+          "text": "Tooling"
+        },
+        {
+          "type": "list",
+          "text": "Pydantic = validation engine"
+        },
+        {
+          "type": "list",
+          "text": "BaseModel → define schema"
+        },
+        {
+          "type": "list",
+          "text": "Supports:"
+        },
+        {
+          "type": "list",
+          "text": "Validation"
+        },
+        {
+          "type": "list",
+          "text": "Defaults"
+        },
+        {
+          "type": "list",
+          "text": "Nested models"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "slug": "chapter-08",
+      "title": "Testing with Pytest",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "(Fixtures, Mocking, Testing Async Code)"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "paragraph",
+          "text": "In backend development, writing code is not enough."
+        },
+        {
+          "type": "subheading",
+          "text": "You must ensure your code:"
+        },
+        {
+          "type": "list",
+          "text": "Works correctly"
+        },
+        {
+          "type": "list",
+          "text": "Handles edge cases"
+        },
+        {
+          "type": "list",
+          "text": "Does not break when updated"
+        },
+        {
+          "type": "paragraph",
+          "text": "👉 This is where testing comes in."
+        },
+        {
+          "type": "subheading",
+          "text": "Real Backend Problems Without Testing:"
+        },
+        {
+          "type": "list",
+          "text": "API breaks after small change"
+        },
+        {
+          "type": "list",
+          "text": "Bugs reach production"
+        },
+        {
+          "type": "list",
+          "text": "Difficult to debug issues"
+        },
+        {
+          "type": "list",
+          "text": "No confidence in code"
+        },
+        {
+          "type": "subheading",
+          "text": "With Testing:"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Detect bugs early"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Ensure reliability"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Improve code quality"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Build confidence during deployment"
+        },
+        {
+          "type": "paragraph",
+          "text": "👉 Companies expect backend developers to know testing."
+        },
+        {
+          "type": "paragraph",
+          "text": "👉 Pytest is the most popular testing framework in Python."
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "What is Testing?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Testing means verifying that your code works as expected."
+        },
+        {
+          "type": "subheading",
+          "text": "Simple Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def add(a, b): return a + bdef test_add(): assert add(2, 3) == 5"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Idea:"
+        },
+        {
+          "type": "list",
+          "text": "assert checks correctness"
+        },
+        {
+          "type": "list",
+          "text": "If condition fails → test fails"
+        },
+        {
+          "type": "heading",
+          "text": "Why Pytest?"
+        },
+        {
+          "type": "subheading",
+          "text": "Pytest is preferred because:"
+        },
+        {
+          "type": "list",
+          "text": "Simple syntax"
+        },
+        {
+          "type": "list",
+          "text": "Powerful features"
+        },
+        {
+          "type": "list",
+          "text": "Easy to write tests"
+        },
+        {
+          "type": "list",
+          "text": "Supports fixtures and mocking"
+        },
+        {
+          "type": "subheading",
+          "text": "Running Tests:"
+        },
+        {
+          "type": "subheading",
+          "text": "pytest"
+        },
+        {
+          "type": "heading",
+          "text": "Writing Basic Tests"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def multiply(a, b): return a * bdef test_multiply(): assert multiply(2, 3) == 6"
+        },
+        {
+          "type": "subheading",
+          "text": "Multiple Tests:"
+        },
+        {
+          "type": "subheading",
+          "text": "def test_case1(): assert 1 + 1 == 2def test_case2(): assert 2 * 2 == 4"
+        },
+        {
+          "type": "heading",
+          "text": "Fixtures (Very Important)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Fixtures provide setup data for tests."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import pytest@pytest.fixturedef sample_user(): return {\"name\": \"Ali\", \"age\": 25}def test_user(sample_user): assert sample_user[\"name\"] == \"Ali\""
+        },
+        {
+          "type": "subheading",
+          "text": "Key Idea:"
+        },
+        {
+          "type": "list",
+          "text": "Reusable setup"
+        },
+        {
+          "type": "list",
+          "text": "Cleaner code"
+        },
+        {
+          "type": "subheading",
+          "text": "Fixture Scope:"
+        },
+        {
+          "type": "subheading",
+          "text": "@pytest.fixture(scope=\"module\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Types:"
+        },
+        {
+          "type": "list",
+          "text": "function (default)"
+        },
+        {
+          "type": "list",
+          "text": "module"
+        },
+        {
+          "type": "list",
+          "text": "session"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use:"
+        },
+        {
+          "type": "list",
+          "text": "Database setup"
+        },
+        {
+          "type": "list",
+          "text": "API client"
+        },
+        {
+          "type": "list",
+          "text": "Test data"
+        },
+        {
+          "type": "heading",
+          "text": "Parametrized Tests"
+        },
+        {
+          "type": "paragraph",
+          "text": "Run same test with multiple inputs."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import pytest@pytest.mark.parametrize(\"a,b,result\", [ (1, 2, 3), (2, 3, 5), (5, 5, 10)])def test_add(a, b, result): assert a + b == result"
+        },
+        {
+          "type": "subheading",
+          "text": "Benefit:"
+        },
+        {
+          "type": "list",
+          "text": "Covers multiple cases"
+        },
+        {
+          "type": "list",
+          "text": "Reduces code duplication"
+        },
+        {
+          "type": "heading",
+          "text": "Mocking (Very Important in Backend)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mocking is used to simulate external dependencies."
+        },
+        {
+          "type": "subheading",
+          "text": "Why Needed?"
+        },
+        {
+          "type": "list",
+          "text": "Avoid real DB calls"
+        },
+        {
+          "type": "list",
+          "text": "Avoid external APIs"
+        },
+        {
+          "type": "list",
+          "text": "Faster tests"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "from unittest.mock import Mockdef test_mock(): mock_func = Mock(return_value=10) assert mock_func() == 10"
+        },
+        {
+          "type": "subheading",
+          "text": "Mocking API:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def fetch_data(api): return api()def test_fetch(): mock_api = Mock(return_value=\"data\") assert fetch_data(mock_api) == \"data\""
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use:"
+        },
+        {
+          "type": "list",
+          "text": "Mock database"
+        },
+        {
+          "type": "list",
+          "text": "Mock HTTP calls"
+        },
+        {
+          "type": "list",
+          "text": "Mock services"
+        },
+        {
+          "type": "heading",
+          "text": "Testing Async Code"
+        },
+        {
+          "type": "paragraph",
+          "text": "Async code needs special handling."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import pytestimport asyncioasync def fetch(): return \"data\"@pytest.mark.asyncioasync def test_fetch(): result = await fetch() assert result == \"data\""
+        },
+        {
+          "type": "subheading",
+          "text": "Key Point:"
+        },
+        {
+          "type": "list",
+          "text": "Use @pytest.mark.asyncio"
+        },
+        {
+          "type": "list",
+          "text": "Use await"
+        },
+        {
+          "type": "heading",
+          "text": "Testing Exceptions"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import pytestdef divide(a, b): return a / bdef test_divide_error(): with pytest.raises(ZeroDivisionError): divide(10, 0)"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use:"
+        },
+        {
+          "type": "list",
+          "text": "Validate error handling"
+        },
+        {
+          "type": "list",
+          "text": "Ensure proper exceptions"
+        },
+        {
+          "type": "heading",
+          "text": "Test Structure (Best Practice)"
+        },
+        {
+          "type": "subheading",
+          "text": "Project Structure:"
+        },
+        {
+          "type": "subheading",
+          "text": "project/│├── app/│ └── main.py│├── tests/│ └── test_main.py"
+        },
+        {
+          "type": "subheading",
+          "text": "Naming Rules:"
+        },
+        {
+          "type": "list",
+          "text": "Test file → test_*.py"
+        },
+        {
+          "type": "list",
+          "text": "Test function → test_*"
+        },
+        {
+          "type": "heading",
+          "text": "Code Coverage (Advanced)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Check how much code is tested."
+        },
+        {
+          "type": "subheading",
+          "text": "Command:"
+        },
+        {
+          "type": "subheading",
+          "text": "pytest --cov=app"
+        },
+        {
+          "type": "subheading",
+          "text": "Goal:"
+        },
+        {
+          "type": "list",
+          "text": "Cover critical logic"
+        },
+        {
+          "type": "list",
+          "text": "Avoid untested code"
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 1: API Testing"
+        },
+        {
+          "type": "paragraph",
+          "text": "def get_user(): return {\"name\": \"Ali\"}def test_get_user(): assert get_user()[\"name\"] == \"Ali\""
+        },
+        {
+          "type": "subheading",
+          "text": "Example 2: Database Mock"
+        },
+        {
+          "type": "paragraph",
+          "text": "def get_data(db): return db.query()def test_db(): mock_db = Mock() mock_db.query.return_value = [1, 2] assert get_data(mock_db) == [1, 2]"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 3: Validation Testing"
+        },
+        {
+          "type": "paragraph",
+          "text": "def validate(age): if age < 0: raise ValueErrordef test_validate(): with pytest.raises(ValueError): validate(-1)"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 4: Async API Test"
+        },
+        {
+          "type": "paragraph",
+          "text": "@pytest.mark.asyncioasync def test_api(): result = await fetch() assert result == \"data\""
+        },
+        {
+          "type": "heading",
+          "text": "Code Examples (Important Patterns)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 1: Setup Fixture"
+        },
+        {
+          "type": "subheading",
+          "text": "@pytest.fixturedef db(): return {\"data\": []}"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 2: Dependency Injection Testing"
+        },
+        {
+          "type": "paragraph",
+          "text": "def service(repo): return repo.get()def test_service(): mock_repo = Mock() mock_repo.get.return_value = \"data\" assert service(mock_repo) == \"data\""
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 3: Edge Case Testing"
+        },
+        {
+          "type": "subheading",
+          "text": "def test_zero(): assert add(0, 0) == 0"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 4: Error Handling Test"
+        },
+        {
+          "type": "subheading",
+          "text": "def test_error(): with pytest.raises(Exception): raise Exception(\"error\")"
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not writing tests"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Testing only happy path"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not mocking external services"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Ignoring edge cases"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Mixing test and production code"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not testing async properly"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q1: What is pytest?"
+        },
+        {
+          "type": "subheading",
+          "text": "Python testing framework"
+        },
+        {
+          "type": "subheading",
+          "text": "Q2: What is fixture?"
+        },
+        {
+          "type": "subheading",
+          "text": "Reusable setup for tests"
+        },
+        {
+          "type": "subheading",
+          "text": "Q3: What is mocking?"
+        },
+        {
+          "type": "subheading",
+          "text": "Simulating dependencies"
+        },
+        {
+          "type": "subheading",
+          "text": "Q4: How to test async code?"
+        },
+        {
+          "type": "subheading",
+          "text": "Use pytest.mark.asyncio"
+        },
+        {
+          "type": "subheading",
+          "text": "Q5: What is assert?"
+        },
+        {
+          "type": "subheading",
+          "text": "Checks expected result"
+        },
+        {
+          "type": "subheading",
+          "text": "Q6: Why testing is important?"
+        },
+        {
+          "type": "list",
+          "text": "Reliability"
+        },
+        {
+          "type": "list",
+          "text": "Bug detection"
+        },
+        {
+          "type": "list",
+          "text": "Confidence"
+        },
+        {
+          "type": "subheading",
+          "text": "Q7: What is parametrization?"
+        },
+        {
+          "type": "subheading",
+          "text": "Run test with multiple inputs"
+        },
+        {
+          "type": "subheading",
+          "text": "Q8: What is code coverage?"
+        },
+        {
+          "type": "subheading",
+          "text": "Measure of tested code"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "Testing ensures code correctness"
+        },
+        {
+          "type": "list",
+          "text": "Pytest = simple + powerful"
+        },
+        {
+          "type": "list",
+          "text": "Use:"
+        },
+        {
+          "type": "list",
+          "text": "assert"
+        },
+        {
+          "type": "list",
+          "text": "fixtures"
+        },
+        {
+          "type": "list",
+          "text": "mocking"
+        },
+        {
+          "type": "list",
+          "text": "Test:"
+        },
+        {
+          "type": "list",
+          "text": "normal cases"
+        },
+        {
+          "type": "list",
+          "text": "edge cases"
+        },
+        {
+          "type": "list",
+          "text": "error cases"
+        },
+        {
+          "type": "list",
+          "text": "Async testing → use @pytest.mark.asyncio"
+        },
+        {
+          "type": "list",
+          "text": "Mock external systems"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "slug": "chapter-09",
+      "title": "Top Python Interview Questions",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "(GIL, Generators vs Iterators, Memory Management)"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "paragraph",
+          "text": "In backend interviews, companies don’t just test coding—they test your deep understanding of Python internals."
+        },
+        {
+          "type": "subheading",
+          "text": "Common topics:"
+        },
+        {
+          "type": "list",
+          "text": "GIL (Global Interpreter Lock)"
+        },
+        {
+          "type": "list",
+          "text": "Generators & Iterators"
+        },
+        {
+          "type": "list",
+          "text": "Memory management"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 These topics are:"
+        },
+        {
+          "type": "list",
+          "text": "Frequently asked in interviews"
+        },
+        {
+          "type": "list",
+          "text": "Critical for writing efficient backend code"
+        },
+        {
+          "type": "list",
+          "text": "Important for performance optimization"
+        },
+        {
+          "type": "subheading",
+          "text": "Real Backend Impact:"
+        },
+        {
+          "type": "list",
+          "text": "Poor memory handling → crashes"
+        },
+        {
+          "type": "list",
+          "text": "Wrong use of generators → slow APIs"
+        },
+        {
+          "type": "list",
+          "text": "Misunderstanding GIL → wrong concurrency decisions"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you master this:"
+        },
+        {
+          "type": "list",
+          "text": "You stand out in interviews"
+        },
+        {
+          "type": "list",
+          "text": "You write optimized code"
+        },
+        {
+          "type": "list",
+          "text": "You understand how Python works internally"
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "GIL (Global Interpreter Lock)"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 What is GIL?"
+        },
+        {
+          "type": "paragraph",
+          "text": "GIL is a lock that allows only one thread to execute Python bytecode at a time."
+        },
+        {
+          "type": "subheading",
+          "text": "Simple Explanation:"
+        },
+        {
+          "type": "subheading",
+          "text": "Even if you create multiple threads:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Only one thread runs at a time in Python"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "import threadingdef task(): for _ in range(1000000): passt1 = threading.Thread(target=task)t2 = threading.Thread(target=task)t1.start()t2.start()"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Threads do NOT run truly in parallel (CPU-bound tasks)"
+        },
+        {
+          "type": "subheading",
+          "text": "Why GIL Exists?"
+        },
+        {
+          "type": "list",
+          "text": "Simplifies memory management"
+        },
+        {
+          "type": "list",
+          "text": "Prevents race conditions"
+        },
+        {
+          "type": "list",
+          "text": "Makes Python easier to implement"
+        },
+        {
+          "type": "subheading",
+          "text": "🔥 Important Distinction:"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Use async for I/O tasks"
+        },
+        {
+          "type": "list",
+          "text": "Use multiprocessing for CPU-heavy tasks"
+        },
+        {
+          "type": "heading",
+          "text": "Iterators (Core Concept)"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 What is an Iterator?"
+        },
+        {
+          "type": "subheading",
+          "text": "An iterator is an object that:"
+        },
+        {
+          "type": "list",
+          "text": "Returns elements one by one"
+        },
+        {
+          "type": "list",
+          "text": "Uses __iter__() and __next__()"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "nums = [1, 2, 3]it = iter(nums)print(next(it)) # 1print(next(it)) # 2"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Idea:"
+        },
+        {
+          "type": "list",
+          "text": "Data is accessed sequentially"
+        },
+        {
+          "type": "list",
+          "text": "No need to store all data at once"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use:"
+        },
+        {
+          "type": "list",
+          "text": "Streaming data"
+        },
+        {
+          "type": "list",
+          "text": "Processing large datasets"
+        },
+        {
+          "type": "heading",
+          "text": "Generators (Memory Efficient)"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 What is Generator?"
+        },
+        {
+          "type": "paragraph",
+          "text": "A generator is a function that yields values one at a time."
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def count(n): for i in range(n): yield igen = count(3)print(next(gen)) # 0print(next(gen)) # 1"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Difference from Function:"
+        },
+        {
+          "type": "list",
+          "text": "Uses yield instead of return"
+        },
+        {
+          "type": "list",
+          "text": "Maintains state between calls"
+        },
+        {
+          "type": "subheading",
+          "text": "Memory Advantage:"
+        },
+        {
+          "type": "subheading",
+          "text": "List:"
+        },
+        {
+          "type": "subheading",
+          "text": "nums = [i for i in range(1000000)]"
+        },
+        {
+          "type": "subheading",
+          "text": "Generator:"
+        },
+        {
+          "type": "subheading",
+          "text": "nums = (i for i in range(1000000))"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Generator uses much less memory"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Use Cases:"
+        },
+        {
+          "type": "list",
+          "text": "Streaming APIs"
+        },
+        {
+          "type": "list",
+          "text": "Reading large files"
+        },
+        {
+          "type": "list",
+          "text": "Lazy evaluation"
+        },
+        {
+          "type": "heading",
+          "text": "Generator vs Iterator"
+        },
+        {
+          "type": "heading",
+          "text": "Memory Management in Python"
+        },
+        {
+          "type": "subheading",
+          "text": "🔹 How Python Manages Memory?"
+        },
+        {
+          "type": "subheading",
+          "text": "Python uses:"
+        },
+        {
+          "type": "list",
+          "text": "Reference counting"
+        },
+        {
+          "type": "list",
+          "text": "Garbage collection"
+        },
+        {
+          "type": "subheading",
+          "text": "Reference Counting:"
+        },
+        {
+          "type": "subheading",
+          "text": "Each object has a reference count"
+        },
+        {
+          "type": "subheading",
+          "text": "a = [1, 2]b = a"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Reference count increases"
+        },
+        {
+          "type": "subheading",
+          "text": "When count = 0:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Object is deleted"
+        },
+        {
+          "type": "subheading",
+          "text": "Garbage Collection:"
+        },
+        {
+          "type": "subheading",
+          "text": "Handles:"
+        },
+        {
+          "type": "list",
+          "text": "Cyclic references"
+        },
+        {
+          "type": "subheading",
+          "text": "import gcgc.collect()"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Avoid memory leaks"
+        },
+        {
+          "type": "list",
+          "text": "Clean unused objects"
+        },
+        {
+          "type": "list",
+          "text": "Use generators for large data"
+        },
+        {
+          "type": "heading",
+          "text": "Memory Optimization Techniques"
+        },
+        {
+          "type": "subheading",
+          "text": "Use Generators Instead of Lists"
+        },
+        {
+          "type": "subheading",
+          "text": "(i for i in range(1000000))"
+        },
+        {
+          "type": "subheading",
+          "text": "Avoid Unnecessary Copies"
+        },
+        {
+          "type": "subheading",
+          "text": "b = a # reference, not copy"
+        },
+        {
+          "type": "subheading",
+          "text": "Use Built-in Functions"
+        },
+        {
+          "type": "list",
+          "text": "Faster"
+        },
+        {
+          "type": "list",
+          "text": "Optimized"
+        },
+        {
+          "type": "subheading",
+          "text": "Use slots (Advanced)"
+        },
+        {
+          "type": "subheading",
+          "text": "class User: __slots__ = [\"name\", \"age\"]"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Reduces memory usage"
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 1: File Streaming"
+        },
+        {
+          "type": "subheading",
+          "text": "def read_file(file): for line in file: yield line"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 2: Large Data Processing"
+        },
+        {
+          "type": "subheading",
+          "text": "def process_data(): for i in range(1000000): yield i * 2"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 3: API Pagination"
+        },
+        {
+          "type": "subheading",
+          "text": "def get_pages(): for i in range(5): yield f\"Page {i}\""
+        },
+        {
+          "type": "subheading",
+          "text": "Example 4: Memory Efficient Loop"
+        },
+        {
+          "type": "subheading",
+          "text": "for num in (i for i in range(1000)): print(num)"
+        },
+        {
+          "type": "heading",
+          "text": "Code Examples (Important Patterns)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 1: Custom Iterator"
+        },
+        {
+          "type": "paragraph",
+          "text": "class Counter: def __init__(self, n): self.n = n self.i = 0 def __iter__(self): return self def __next__(self): if self.i < self.n: self.i += 1 return self.i raise StopIteration"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 2: Generator Pipeline"
+        },
+        {
+          "type": "subheading",
+          "text": "def square(nums): for n in nums: yield n * n"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 3: Lazy Evaluation"
+        },
+        {
+          "type": "subheading",
+          "text": "nums = (i*i for i in range(10))"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 4: Memory Safe Processing"
+        },
+        {
+          "type": "subheading",
+          "text": "def process(stream): for item in stream: yield item"
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Thinking threads run in parallel (GIL issue)"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Using list instead of generator for large data"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not understanding yield vs return"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Memory leaks due to references"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not using lazy evaluation"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q1: What is GIL?"
+        },
+        {
+          "type": "subheading",
+          "text": "Lock that allows only one thread to execute Python code at a time"
+        },
+        {
+          "type": "subheading",
+          "text": "Q2: Does GIL affect all programs?"
+        },
+        {
+          "type": "subheading",
+          "text": "Only CPU-bound programs"
+        },
+        {
+          "type": "subheading",
+          "text": "Q3: What is iterator?"
+        },
+        {
+          "type": "subheading",
+          "text": "Object that returns elements one by one"
+        },
+        {
+          "type": "subheading",
+          "text": "Q4: What is generator?"
+        },
+        {
+          "type": "subheading",
+          "text": "Function that yields values lazily"
+        },
+        {
+          "type": "subheading",
+          "text": "Q5: Difference between list and generator?"
+        },
+        {
+          "type": "list",
+          "text": "List → stores all values"
+        },
+        {
+          "type": "list",
+          "text": "Generator → generates on demand"
+        },
+        {
+          "type": "subheading",
+          "text": "Q6: What is yield?"
+        },
+        {
+          "type": "subheading",
+          "text": "Keyword that returns value and pauses function"
+        },
+        {
+          "type": "subheading",
+          "text": "Q7: How Python manages memory?"
+        },
+        {
+          "type": "list",
+          "text": "Reference counting"
+        },
+        {
+          "type": "list",
+          "text": "Garbage collection"
+        },
+        {
+          "type": "subheading",
+          "text": "Q8: When to use generator?"
+        },
+        {
+          "type": "list",
+          "text": "Large data"
+        },
+        {
+          "type": "list",
+          "text": "Streaming"
+        },
+        {
+          "type": "list",
+          "text": "Memory optimization"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "GIL → one thread at a time"
+        },
+        {
+          "type": "list",
+          "text": "Use:"
+        },
+        {
+          "type": "list",
+          "text": "async → I/O tasks"
+        },
+        {
+          "type": "list",
+          "text": "multiprocessing → CPU tasks"
+        },
+        {
+          "type": "list",
+          "text": "Iterator → sequential access"
+        },
+        {
+          "type": "list",
+          "text": "Generator → memory efficient"
+        },
+        {
+          "type": "list",
+          "text": "yield → pauses function"
+        },
+        {
+          "type": "list",
+          "text": "Python memory:"
+        },
+        {
+          "type": "list",
+          "text": "reference counting"
+        },
+        {
+          "type": "list",
+          "text": "garbage collection"
+        },
+        {
+          "type": "list",
+          "text": "Optimize using:"
+        },
+        {
+          "type": "list",
+          "text": "generators"
+        },
+        {
+          "type": "list",
+          "text": "lazy evaluation"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "slug": "chapter-10",
+      "title": "Coding Patterns",
+      "blocks": [
+        {
+          "type": "subheading",
+          "text": "(Writing Clean Python, Common Mistakes, Best Practices for Backend)"
+        },
+        {
+          "type": "heading",
+          "text": "Introduction (Why This Matters in Backend)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Writing code is easy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Writing clean, maintainable, scalable backend code is hard."
+        },
+        {
+          "type": "subheading",
+          "text": "In real backend systems:"
+        },
+        {
+          "type": "list",
+          "text": "Multiple developers work on same codebase"
+        },
+        {
+          "type": "list",
+          "text": "Code grows over time"
+        },
+        {
+          "type": "list",
+          "text": "Bugs appear if structure is poor"
+        },
+        {
+          "type": "paragraph",
+          "text": "👉 Interviewers don’t just check if your code works."
+        },
+        {
+          "type": "subheading",
+          "text": "They check:"
+        },
+        {
+          "type": "list",
+          "text": "Is your code clean?"
+        },
+        {
+          "type": "list",
+          "text": "Is it readable?"
+        },
+        {
+          "type": "list",
+          "text": "Is it scalable?"
+        },
+        {
+          "type": "list",
+          "text": "Does it follow best practices?"
+        },
+        {
+          "type": "subheading",
+          "text": "Real Backend Impact:"
+        },
+        {
+          "type": "subheading",
+          "text": "Bad code:"
+        },
+        {
+          "type": "list",
+          "text": "Hard to debug"
+        },
+        {
+          "type": "list",
+          "text": "Difficult to scale"
+        },
+        {
+          "type": "list",
+          "text": "Full of bugs"
+        },
+        {
+          "type": "subheading",
+          "text": "Clean code:"
+        },
+        {
+          "type": "list",
+          "text": "Easy to understand"
+        },
+        {
+          "type": "list",
+          "text": "Easy to maintain"
+        },
+        {
+          "type": "list",
+          "text": "Easy to extend"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 If you master coding patterns:"
+        },
+        {
+          "type": "list",
+          "text": "You write production-level code"
+        },
+        {
+          "type": "list",
+          "text": "You impress interviewers"
+        },
+        {
+          "type": "list",
+          "text": "You become a strong backend developer"
+        },
+        {
+          "type": "heading",
+          "text": "Core Concepts"
+        },
+        {
+          "type": "heading",
+          "text": "What is Clean Code?"
+        },
+        {
+          "type": "subheading",
+          "text": "Clean code is code that is:"
+        },
+        {
+          "type": "list",
+          "text": "Easy to read"
+        },
+        {
+          "type": "list",
+          "text": "Easy to understand"
+        },
+        {
+          "type": "list",
+          "text": "Easy to modify"
+        },
+        {
+          "type": "subheading",
+          "text": "Bad Code:"
+        },
+        {
+          "type": "subheading",
+          "text": "def f(x): return x*2"
+        },
+        {
+          "type": "subheading",
+          "text": "Clean Code:"
+        },
+        {
+          "type": "subheading",
+          "text": "def double_number(number: int) -> int: return number * 2"
+        },
+        {
+          "type": "subheading",
+          "text": "Key Principles:"
+        },
+        {
+          "type": "list",
+          "text": "Meaningful names"
+        },
+        {
+          "type": "list",
+          "text": "Simple logic"
+        },
+        {
+          "type": "list",
+          "text": "Consistent structure"
+        },
+        {
+          "type": "heading",
+          "text": "Naming Conventions (Very Important)"
+        },
+        {
+          "type": "subheading",
+          "text": "Rules:"
+        },
+        {
+          "type": "list",
+          "text": "Variables → lowercase_with_underscores"
+        },
+        {
+          "type": "list",
+          "text": "Functions → lowercase_with_underscores"
+        },
+        {
+          "type": "list",
+          "text": "Classes → PascalCase"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "user_name = \"Ali\"def calculate_total(): passclass UserService: pass"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Good naming reduces confusion"
+        },
+        {
+          "type": "list",
+          "text": "Helps in large teams"
+        },
+        {
+          "type": "heading",
+          "text": "DRY Principle (Don’t Repeat Yourself)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Avoid duplicate code."
+        },
+        {
+          "type": "subheading",
+          "text": "Bad:"
+        },
+        {
+          "type": "subheading",
+          "text": "print(\"User created\")print(\"User created\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Good:"
+        },
+        {
+          "type": "subheading",
+          "text": "def log_user_created(): print(\"User created\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Benefit:"
+        },
+        {
+          "type": "list",
+          "text": "Easier maintenance"
+        },
+        {
+          "type": "list",
+          "text": "Single source of truth"
+        },
+        {
+          "type": "heading",
+          "text": "KISS Principle (Keep It Simple)"
+        },
+        {
+          "type": "subheading",
+          "text": "Bad:"
+        },
+        {
+          "type": "subheading",
+          "text": "def add(a, b): return (a + b) * 1"
+        },
+        {
+          "type": "subheading",
+          "text": "Good:"
+        },
+        {
+          "type": "subheading",
+          "text": "def add(a, b): return a + b"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Insight:"
+        },
+        {
+          "type": "list",
+          "text": "Simpler code → fewer bugs"
+        },
+        {
+          "type": "heading",
+          "text": "Separation of Concerns"
+        },
+        {
+          "type": "paragraph",
+          "text": "Divide code into different responsibilities."
+        },
+        {
+          "type": "subheading",
+          "text": "Bad:"
+        },
+        {
+          "type": "subheading",
+          "text": "def process(): print(\"Validate\") print(\"Save to DB\") print(\"Send email\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Good:"
+        },
+        {
+          "type": "subheading",
+          "text": "def validate(): passdef save(): passdef send_email(): pass"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Structure:"
+        },
+        {
+          "type": "list",
+          "text": "Controller"
+        },
+        {
+          "type": "list",
+          "text": "Service"
+        },
+        {
+          "type": "list",
+          "text": "Repository"
+        },
+        {
+          "type": "heading",
+          "text": "Writing Reusable Functions"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "paragraph",
+          "text": "def calculate_discount(price: float, percent: float) -> float: return price - (price * percent / 100)"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Benefit:"
+        },
+        {
+          "type": "list",
+          "text": "Reusable logic"
+        },
+        {
+          "type": "list",
+          "text": "Cleaner code"
+        },
+        {
+          "type": "heading",
+          "text": "Avoiding Large Functions"
+        },
+        {
+          "type": "subheading",
+          "text": "Bad:"
+        },
+        {
+          "type": "subheading",
+          "text": "def big_function(): # 100+ lines ❌ pass"
+        },
+        {
+          "type": "subheading",
+          "text": "Good:"
+        },
+        {
+          "type": "list",
+          "text": "Break into smaller functions"
+        },
+        {
+          "type": "subheading",
+          "text": "Rule:"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 One function → one responsibility"
+        },
+        {
+          "type": "heading",
+          "text": "Using Built-in Functions (Optimization)"
+        },
+        {
+          "type": "subheading",
+          "text": "Bad:"
+        },
+        {
+          "type": "subheading",
+          "text": "total = 0for i in numbers: total += i"
+        },
+        {
+          "type": "subheading",
+          "text": "Good:"
+        },
+        {
+          "type": "subheading",
+          "text": "total = sum(numbers)"
+        },
+        {
+          "type": "subheading",
+          "text": "Backend Benefit:"
+        },
+        {
+          "type": "list",
+          "text": "Faster"
+        },
+        {
+          "type": "list",
+          "text": "Cleaner"
+        },
+        {
+          "type": "heading",
+          "text": "List & Dict Comprehensions"
+        },
+        {
+          "type": "subheading",
+          "text": "Bad:"
+        },
+        {
+          "type": "subheading",
+          "text": "result = []for i in range(10): result.append(i*i)"
+        },
+        {
+          "type": "subheading",
+          "text": "Good:"
+        },
+        {
+          "type": "subheading",
+          "text": "result = [i*i for i in range(10)]"
+        },
+        {
+          "type": "heading",
+          "text": "Error Handling Best Practices"
+        },
+        {
+          "type": "subheading",
+          "text": "Bad:"
+        },
+        {
+          "type": "subheading",
+          "text": "try: x = 10/0except: pass"
+        },
+        {
+          "type": "subheading",
+          "text": "Good:"
+        },
+        {
+          "type": "subheading",
+          "text": "try: x = 10/0except ZeroDivisionError: print(\"Cannot divide by zero\")"
+        },
+        {
+          "type": "heading",
+          "text": "Avoid Global Variables"
+        },
+        {
+          "type": "subheading",
+          "text": "Bad:"
+        },
+        {
+          "type": "subheading",
+          "text": "count = 0"
+        },
+        {
+          "type": "subheading",
+          "text": "Good:"
+        },
+        {
+          "type": "list",
+          "text": "Use function arguments"
+        },
+        {
+          "type": "list",
+          "text": "Use classes"
+        },
+        {
+          "type": "heading",
+          "text": "Writing Pythonic Code"
+        },
+        {
+          "type": "subheading",
+          "text": "Pythonic code means:"
+        },
+        {
+          "type": "list",
+          "text": "Clean"
+        },
+        {
+          "type": "list",
+          "text": "Simple"
+        },
+        {
+          "type": "list",
+          "text": "Readable"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "if not users: print(\"Empty\")"
+        },
+        {
+          "type": "subheading",
+          "text": "Instead of:"
+        },
+        {
+          "type": "subheading",
+          "text": "if len(users) == 0:"
+        },
+        {
+          "type": "heading",
+          "text": "Code Formatting (PEP 8)"
+        },
+        {
+          "type": "subheading",
+          "text": "Follow Python style guide:"
+        },
+        {
+          "type": "list",
+          "text": "Proper indentation"
+        },
+        {
+          "type": "list",
+          "text": "Line length"
+        },
+        {
+          "type": "list",
+          "text": "Naming"
+        },
+        {
+          "type": "subheading",
+          "text": "Example:"
+        },
+        {
+          "type": "subheading",
+          "text": "def greet(name: str) -> str: return f\"Hello {name}\""
+        },
+        {
+          "type": "heading",
+          "text": "Real-World Examples"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 1: Clean API Function"
+        },
+        {
+          "type": "subheading",
+          "text": "def get_user(user_id: int) -> dict: return {\"id\": user_id}"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 2: Service Layer"
+        },
+        {
+          "type": "subheading",
+          "text": "def create_user(data: dict): validate(data) save(data)"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 3: Data Processing"
+        },
+        {
+          "type": "subheading",
+          "text": "numbers = [1, 2, 3]squares = [n*n for n in numbers]"
+        },
+        {
+          "type": "subheading",
+          "text": "Example 4: Clean Validation"
+        },
+        {
+          "type": "subheading",
+          "text": "def validate_age(age: int): if age < 0: raise ValueError(\"Invalid age\")"
+        },
+        {
+          "type": "heading",
+          "text": "Code Examples (Important Patterns)"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 1: Guard Clauses"
+        },
+        {
+          "type": "subheading",
+          "text": "def process(data): if not data: return \"Empty\" return data"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 2: Dictionary Mapping"
+        },
+        {
+          "type": "subheading",
+          "text": "operations = { \"add\": lambda a, b: a + b}"
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 3: Early Return"
+        },
+        {
+          "type": "subheading",
+          "text": "def check(x): if x < 0: return \"Invalid\" return \"Valid\""
+        },
+        {
+          "type": "subheading",
+          "text": "Pattern 4: Clean Loop"
+        },
+        {
+          "type": "subheading",
+          "text": "for user in users: print(user)"
+        },
+        {
+          "type": "heading",
+          "text": "Common Mistakes"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Writing long functions"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Poor variable naming"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Repeating code"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Ignoring edge cases"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Using global variables"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Not following PEP 8"
+        },
+        {
+          "type": "subheading",
+          "text": "❌ Overcomplicating logic"
+        },
+        {
+          "type": "heading",
+          "text": "Interview Questions with Answers"
+        },
+        {
+          "type": "subheading",
+          "text": "Q1: What is clean code?"
+        },
+        {
+          "type": "subheading",
+          "text": "Readable, maintainable code"
+        },
+        {
+          "type": "subheading",
+          "text": "Q2: What is DRY?"
+        },
+        {
+          "type": "subheading",
+          "text": "Avoid repeating code"
+        },
+        {
+          "type": "subheading",
+          "text": "Q3: What is KISS?"
+        },
+        {
+          "type": "subheading",
+          "text": "Keep code simple"
+        },
+        {
+          "type": "subheading",
+          "text": "Q4: Why avoid global variables?"
+        },
+        {
+          "type": "subheading",
+          "text": "Hard to manage and debug"
+        },
+        {
+          "type": "subheading",
+          "text": "Q5: What is Pythonic code?"
+        },
+        {
+          "type": "subheading",
+          "text": "Code that follows Python best practices"
+        },
+        {
+          "type": "subheading",
+          "text": "Q6: Why use built-in functions?"
+        },
+        {
+          "type": "subheading",
+          "text": "Optimized and readable"
+        },
+        {
+          "type": "subheading",
+          "text": "Q7: What is separation of concerns?"
+        },
+        {
+          "type": "subheading",
+          "text": "Divide code into responsibilities"
+        },
+        {
+          "type": "subheading",
+          "text": "Q8: How to improve code readability?"
+        },
+        {
+          "type": "list",
+          "text": "Naming"
+        },
+        {
+          "type": "list",
+          "text": "Formatting"
+        },
+        {
+          "type": "list",
+          "text": "Simplicity"
+        },
+        {
+          "type": "heading",
+          "text": "Summary (Quick Revision)"
+        },
+        {
+          "type": "list",
+          "text": "Write clean, readable code"
+        },
+        {
+          "type": "list",
+          "text": "Follow:"
+        },
+        {
+          "type": "list",
+          "text": "DRY"
+        },
+        {
+          "type": "list",
+          "text": "KISS"
+        },
+        {
+          "type": "list",
+          "text": "PEP 8"
+        },
+        {
+          "type": "list",
+          "text": "Use:"
+        },
+        {
+          "type": "list",
+          "text": "meaningful names"
+        },
+        {
+          "type": "list",
+          "text": "small functions"
+        },
+        {
+          "type": "list",
+          "text": "built-in methods"
+        },
+        {
+          "type": "list",
+          "text": "Avoid:"
+        },
+        {
+          "type": "list",
+          "text": "global variables"
+        },
+        {
+          "type": "list",
+          "text": "long functions"
+        },
+        {
+          "type": "list",
+          "text": "duplicate code"
+        },
+        {
+          "type": "list",
+          "text": "Structure backend code properly"
+        },
+        {
+          "type": "subheading",
+          "text": "👉 Master coding patterns ="
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Production-quality backend code"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Better teamwork"
+        },
+        {
+          "type": "subheading",
+          "text": "✔ Strong interview performance 🚀"
+        }
+      ]
+    }
+  ]
+}

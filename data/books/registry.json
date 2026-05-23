@@ -1,0 +1,110 @@
+[
+  {
+    "slug": "python-backend-foundation",
+    "title": "Python Backend Foundation",
+    "category": "Backend",
+    "level": "Book 1",
+    "description": "Begin Python backend development with setup, Python basics, APIs and backend thinking.",
+    "source": "BOOK 1 Python Backend Foundation.docx",
+    "chapters": 10
+  },
+  {
+    "slug": "english",
+    "title": "English",
+    "category": "Communication",
+    "level": "Foundation",
+    "description": "Build practical English reading, writing, vocabulary and communication skills.",
+    "source": "English.docx",
+    "chapters": 5
+  },
+  {
+    "slug": "backend-developer-interview-mastery",
+    "title": "Backend Developer Interview Mastery",
+    "category": "Interview",
+    "level": "Job Prep",
+    "description": "Prepare for backend interviews with core concepts, questions, system design and practical answers.",
+    "source": "Backend Developer Interview Mastery.docx",
+    "chapters": 43
+  },
+  {
+    "slug": "javascript-web-development-master-book",
+    "title": "JavaScript for Web Development Master Book",
+    "category": "Web",
+    "level": "Complete Book",
+    "description": "Learn JavaScript for frontend development, DOM work, browser logic and modern web projects.",
+    "source": "JAVASCRIPT FOR WEB DEVELOPMENT MASTER BOOK.docx",
+    "chapters": 35
+  },
+  {
+    "slug": "master-english-easily",
+    "title": "Master English Easily",
+    "category": "Communication",
+    "level": "Beginner",
+    "description": "Learn English in a simple way with grammar, vocabulary, speaking and practice lessons.",
+    "source": "MASTER ENGLISH EASILY.docx",
+    "chapters": 40
+  },
+  {
+    "slug": "fresher-to-job-ready-data-analyst",
+    "title": "Fresher to Job-Ready Data Analyst",
+    "category": "Data",
+    "level": "Career Path",
+    "description": "Move from beginner to job-ready data analyst with Excel, SQL, dashboards, projects and interview prep.",
+    "source": "Fresher to Job-Ready Data Analyst.docx",
+    "chapters": 47
+  },
+  {
+    "slug": "backend-development-and-databases",
+    "title": "Backend Development and Databases",
+    "category": "Backend",
+    "level": "Book 2",
+    "description": "Go deeper into backend development, database design, SQL, APIs and persistent data systems.",
+    "source": "BOOK 2 Backend Development & Databases.docx",
+    "chapters": 15
+  },
+  {
+    "slug": "advanced-backend-and-system-design",
+    "title": "Advanced Backend and System Design",
+    "category": "Backend",
+    "level": "Book 3",
+    "description": "Study advanced backend architecture, scaling, reliability, distributed systems and system design.",
+    "source": "BOOK 3 Advanced Backend & System Design.docx",
+    "chapters": 16
+  },
+  {
+    "slug": "python-backend-development",
+    "title": "Python Backend Development",
+    "category": "Backend",
+    "level": "Complete Book",
+    "description": "Build production-ready Python backends with FastAPI, databases, auth, testing, Docker and deployment.",
+    "source": "Python for Backend Development.docx",
+    "chapters": 30
+  },
+  {
+    "slug": "python-engineering",
+    "title": "Python Engineering",
+    "category": "Programming",
+    "level": "Professional",
+    "description": "Write cleaner, stronger Python with engineering practices, architecture and maintainable code.",
+    "source": "Python Engineering.docx",
+    "chapters": 69
+  },
+  {
+    "slug": "backend-engineering-to-ai-systems",
+    "title": "Backend Engineering to AI Systems",
+    "category": "AI/ML",
+    "level": "Advanced",
+    "description": "Connect backend engineering with AI systems, data pipelines, APIs and intelligent applications.",
+    "source": "Backend Engineering to AI Systems.docx",
+    "chapters": 80
+  },
+  {
+    "slug": "python-dsa",
+    "title": "Python DSA",
+    "category": "DSA",
+    "level": "Practice Book",
+    "description": "Learn data structures and algorithms using Python with topic-wise explanations and practice.",
+    "source": "PYTHON DSA.docx",
+    "chapters": 30
+  }
+]
