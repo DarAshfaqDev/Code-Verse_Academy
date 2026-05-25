@@ -7,8 +7,8 @@ import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("student@codeverse.dev");
-  const [password, setPassword] = useState("demo1234");
+  const [email, setEmail] = useState("moeedkamraan1123@gmail.com");
+  const [password, setPassword] = useState("Cde@Verse2026");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -55,7 +55,7 @@ export default function LoginPage() {
         </div>
         <form className="p-8" onSubmit={handleSubmit}>
           <h2 className="text-2xl font-black">Sign in</h2>
-          <p className="mt-2 text-sm text-slate-500">Use the demo account below or enter any valid email.</p>
+          <p className="mt-2 text-sm text-slate-500">Use the admin demo account below or enter any valid learner email.</p>
           <label className="mt-6 block text-sm font-bold">
             Email
             <span className="mt-2 flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-3 dark:border-slate-800">

@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 
 function createDemoToken(email: string) {
+  const role = email === "moeedkamraan1123@gmail.com" ? "admin" : "student";
   const payload = {
     email,
-    role: "student",
+    role,
     issuedAt: new Date().toISOString()
   };
 
@@ -23,12 +24,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Password must be at least 6 characters." }, { status: 400 });
   }
 
+  if (email === "moeedkamraan1123@gmail.com" && password !== "Cde@Verse2026") {
+    return NextResponse.json({ error: "Invalid admin password." }, { status: 401 });
+  }
+
+  const isAdmin = email === "moeedkamraan1123@gmail.com";
+
   return NextResponse.json({
     token: createDemoToken(email),
     user: {
-      name: email === "student@codeverse.dev" ? "CodeVerse Student" : email.split("@")[0],
+      name: isAdmin ? "Moeed Kamraan" : email === "student@codeverse.dev" ? "CodeVerse Student" : email.split("@")[0],
       email,
-      role: "student"
+      role: isAdmin ? "admin" : "student"
     }
   });
 }

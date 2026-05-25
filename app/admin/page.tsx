@@ -1,13 +1,20 @@
-import { BookPlus, FileCheck2, PieChart, Users } from "lucide-react";
+import { BadgeCheck, BookPlus, Download, FileCheck2, PieChart, QrCode, ShieldCheck, Users } from "lucide-react";
 import { LearningChart } from "@/components/charts";
 import { Section } from "@/components/section";
 import { adminMetrics, courses } from "@/lib/data";
+import { certificateTemplates } from "@/lib/certificates";
 
 export default function AdminPage() {
   return (
     <Section eyebrow="Admin panel" title="Manage courses, sheets, quizzes and certificates" copy="Upload lessons, organize sections, manage users, check analytics, publish mock tests and issue certificates.">
       <div className="grid gap-5 md:grid-cols-4">
-        {adminMetrics.map((metric) => (
+        {[
+          ...adminMetrics,
+          { label: "Certificates issued", value: "1,284", change: "+14%" },
+          { label: "Certificate downloads", value: "3,916", change: "+31%" },
+          { label: "Verification scans", value: "842", change: "+19%" },
+          { label: "Active templates", value: String(certificateTemplates.length), change: "Live" }
+        ].slice(0, 8).map((metric) => (
           <div key={metric.label} className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
             <p className="text-sm font-bold text-slate-500">{metric.label}</p>
             <p className="mt-2 text-3xl font-black">{metric.value}</p>
@@ -30,7 +37,10 @@ export default function AdminPage() {
               ["Upload lesson", BookPlus],
               ["Manage users", Users],
               ["Practice sheet management", FileCheck2],
-              ["Certificate management", FileCheck2]
+              ["Certificate management", BadgeCheck],
+              ["Template management", ShieldCheck],
+              ["Verification records", QrCode],
+              ["Download logs", Download]
             ].map(([label, Icon]) => (
               <button key={label as string} className="flex items-center gap-3 rounded-xl bg-slate-50 p-4 text-left font-black transition hover:bg-cyan-50 dark:bg-slate-950 dark:hover:bg-slate-800">
                 <Icon className="size-5 text-brand-600" /> {label as string}
