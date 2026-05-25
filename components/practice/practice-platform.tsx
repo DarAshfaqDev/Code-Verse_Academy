@@ -1,11 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
+  ArrowLeft,
   BadgeCheck,
   BarChart3,
+  Bookmark,
   BookOpen,
   CheckCircle2,
+  ChevronLeft,
   ChevronRight,
   CircleDot,
   ClipboardList,
@@ -13,19 +16,41 @@ import {
   FileQuestion,
   Flame,
   FolderKanban,
+  HelpCircle,
   Lock,
+  Maximize,
+  PanelRight,
   PlayCircle,
+  RotateCcw,
   Search,
   Sparkles,
   Trophy,
   Upload,
-  Users
+  Users,
+  X
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { PracticeTask, PracticeTaskType, PracticeTrack } from "@/lib/practice";
 
 type PracticePlatformProps = {
   tracks: PracticeTrack[];
+};
+
+type PracticeTaskWithModule = PracticeTask & {
+  moduleTitle: string;
+};
+
+type PracticeMemory = {
+  completed: string[];
+  practiceDates: string[];
+};
+
+type QuizQuestion = {
+  question: string;
+  options: string[];
+  answer: number;
+  explanation: string;
+  difficulty: "easy" | "medium" | "hard";
 };
 
 const tabs = [
@@ -54,14 +79,100 @@ const leaderboard = [
   { name: "You", score: 7640, badge: "Steady Learner" }
 ];
 
+const memoryKey = "codeverse-practice-memory";
+
+const confettiPieces = Array.from({ length: 95 }, (_, index) => ({
+  id: index,
+  left: `${(index * 37) % 100}%`,
+  delay: `${(index % 12) * 0.08}s`,
+  duration: `${2.2 + (index % 8) * 0.16}s`,
+  color: ["#63d94f", "#dd36d8", "#21b9df", "#f2d84e", "#ef6a8a", "#f19b28", "#8b5cf6"][index % 7],
+  width: `${6 + (index % 5) * 2}px`,
+  height: `${10 + (index % 4) * 3}px`,
+  rotate: `${(index * 29) % 180}deg`
+}));
+
+function dateKey(date = new Date()) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function calculateStreak(practiceDates: string[]) {
+  const dates = new Set(practiceDates);
+  let streak = 0;
+  const cursor = new Date();
+
+  while (dates.has(dateKey(cursor))) {
+    streak += 1;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+
+  return streak;
+}
+
+function readPracticeMemory(): PracticeMemory {
+  if (typeof window === "undefined") {
+    return { completed: [], practiceDates: [] };
+  }
+
+  try {
+    const memory = JSON.parse(window.localStorage.getItem(memoryKey) ?? "{}") as Partial<PracticeMemory>;
+    return {
+      completed: Array.isArray(memory.completed) ? memory.completed : [],
+      practiceDates: Array.isArray(memory.practiceDates) ? memory.practiceDates : []
+    };
+  } catch {
+    return { completed: [], practiceDates: [] };
+  }
+}
+
+function quizForTask(task: PracticeTaskWithModule): QuizQuestion[] {
+  return [
+    {
+      question: `What should you understand first in ${task.moduleTitle}?`,
+      options: ["The main concept and use case", "Only the final answer", "Only the tool name", "Nothing before coding"],
+      answer: 0,
+      explanation: `Start by understanding the concept, why it exists, and where it is used. That makes the practice task easier to solve.`,
+      difficulty: "medium"
+    },
+    {
+      question: `Which activity best proves practice for ${task.title}?`,
+      options: ["Skipping examples", "Applying it in a small task", "Changing the topic", "Reading only headings"],
+      answer: 1,
+      explanation: `Practice is proven by applying the idea in a small working task, not by only reading or memorizing.`,
+      difficulty: "easy"
+    },
+    {
+      question: "What should you do after making a mistake?",
+      options: ["Ignore it", "Copy a solution silently", "Write the reason and retry", "Stop the course"],
+      answer: 2,
+      explanation: `Writing the reason for a mistake helps you avoid repeating it and builds interview-ready clarity.`,
+      difficulty: "easy"
+    }
+  ];
+}
+
 export function PracticePlatform({ tracks }: PracticePlatformProps) {
   const [selectedTrackId, setSelectedTrackId] = useState(tracks[0]?.id ?? "");
   const [selectedModuleId, setSelectedModuleId] = useState(tracks[0]?.modules[0]?.id ?? "");
   const [activeTab, setActiveTab] = useState("practice");
   const [query, setQuery] = useState("");
   const [completed, setCompleted] = useState<string[]>([]);
+  const [streak, setStreak] = useState(0);
+  const [activeTask, setActiveTask] = useState<PracticeTaskWithModule | null>(null);
+  const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [submittedQuestions, setSubmittedQuestions] = useState<number[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [workspaceText, setWorkspaceText] = useState("");
   const [submission, setSubmission] = useState("");
   const [submittedMessage, setSubmittedMessage] = useState("");
+  const [toast, setToast] = useState("");
+
+  useEffect(() => {
+    const memory = readPracticeMemory();
+    setCompleted(memory.completed);
+    setStreak(calculateStreak(memory.practiceDates));
+  }, []);
 
   const selectedTrack = useMemo(
     () => tracks.find((track) => track.id === selectedTrackId) ?? tracks[0],
@@ -101,10 +212,70 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
     setActiveTab("practice");
     setQuery("");
     setSubmittedMessage("");
+    setActiveTask(null);
   }
 
-  function markTask(task: PracticeTask) {
-    setCompleted((items) => (items.includes(task.id) ? items : [...items, task.id]));
+  function openTask(task: PracticeTaskWithModule) {
+    setActiveTask(task);
+    setAnswers({});
+    setSubmittedQuestions([]);
+    setCurrentQuestionIndex(0);
+    setShowCelebration(false);
+    setWorkspaceText("");
+    setSubmittedMessage("");
+    setToast("");
+  }
+
+  function openNextTask() {
+    const nextTask =
+      allTasks.find((task) => task.type === "mcq" && !completed.includes(task.id)) ??
+      allTasks.find((task) => !completed.includes(task.id)) ??
+      allTasks[0];
+    if (nextTask) {
+      openTask(nextTask);
+    }
+  }
+
+  function completeTask(task: PracticeTaskWithModule) {
+    setCompleted((items) => {
+      const nextCompleted = items.includes(task.id) ? items : [...items, task.id];
+      const memory = readPracticeMemory();
+      const nextPracticeDates = Array.from(new Set([...memory.practiceDates, dateKey()]));
+      const nextStreak = calculateStreak(nextPracticeDates);
+
+      window.localStorage.setItem(
+        memoryKey,
+        JSON.stringify({
+          completed: nextCompleted,
+          practiceDates: nextPracticeDates
+        })
+      );
+      setStreak(nextStreak);
+      return nextCompleted;
+    });
+  }
+
+  function submitMcqAnswer() {
+    if (!activeTask || activeTask.type !== "mcq") return;
+    const quiz = quizForTask(activeTask);
+    const question = quiz[currentQuestionIndex];
+    const selected = answers[currentQuestionIndex];
+
+    if (typeof selected !== "number") {
+      setToast("Choose one option before submitting.");
+      return;
+    }
+
+    setSubmittedQuestions((items) => (items.includes(currentQuestionIndex) ? items : [...items, currentQuestionIndex]));
+
+    if (selected === question.answer) {
+      completeTask(activeTask);
+      setToast("MCQ answer submitted successfully");
+      setShowCelebration(true);
+      window.setTimeout(() => setShowCelebration(false), 2800);
+    } else {
+      setToast("Try again. Read the explanation and choose carefully.");
+    }
   }
 
   function submitWork() {
@@ -120,6 +291,259 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
     return (
       <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-white">
         No practice tracks are available yet.
+      </div>
+    );
+  }
+
+  if (activeTask?.type === "mcq") {
+    const quiz = quizForTask(activeTask);
+    const currentQuestion = quiz[currentQuestionIndex];
+    const selectedOption = answers[currentQuestionIndex];
+    const isSubmitted = submittedQuestions.includes(currentQuestionIndex);
+    const correct = isSubmitted && selectedOption === currentQuestion.answer;
+    const mcqProgress = Math.round((submittedQuestions.length / quiz.length) * 100);
+
+    return (
+      <div className="min-h-screen overflow-hidden bg-[#101010] text-white">
+        <style jsx>{`
+          @keyframes confetti-shower {
+            0% {
+              opacity: 0;
+              transform: translate3d(0, -12vh, 0) rotate(0deg);
+            }
+            12% {
+              opacity: 1;
+            }
+            100% {
+              opacity: 0;
+              transform: translate3d(var(--drift), 88vh, 0) rotate(760deg);
+            }
+          }
+        `}</style>
+
+        {showCelebration ? (
+          <div className="pointer-events-none fixed inset-0 z-[70] overflow-hidden">
+            {confettiPieces.map((piece) => (
+              <span
+                key={piece.id}
+                className="absolute top-0 rounded-sm"
+                style={{
+                  left: piece.left,
+                  width: piece.width,
+                  height: piece.height,
+                  background: piece.color,
+                  transform: `rotate(${piece.rotate})`,
+                  animation: `confetti-shower ${piece.duration} linear ${piece.delay} forwards`,
+                  ["--drift" as string]: `${piece.id % 2 === 0 ? "" : "-"}${24 + (piece.id % 9) * 9}px`
+                }}
+              />
+            ))}
+          </div>
+        ) : null}
+
+        {toast ? (
+          <div className={`fixed right-5 top-8 z-[80] rounded-lg px-5 py-3 text-sm font-bold shadow-2xl ${
+            toast.includes("successfully") ? "bg-[#58c83c] text-white" : "bg-orange-600 text-white"
+          }`}>
+            {toast}
+          </div>
+        ) : null}
+
+        <header className="flex h-[104px] items-center justify-between border-b border-white/15 bg-[#181818] px-5 md:px-9">
+          <div className="flex items-center gap-4">
+            <div className="grid size-11 place-items-center rounded-xl bg-white text-[#181818]">
+              <Code2 className="size-7" />
+            </div>
+            <div className="border-l border-white/40 pl-5">
+              <p className="text-2xl font-black leading-6">CodeVerse</p>
+              <p className="text-2xl font-black leading-6">Academy</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="grid size-12 place-items-center rounded-full bg-[#243bff] text-lime-300">
+              <CircleDot className="size-8 fill-current" />
+            </div>
+            <ChevronRight className="size-5 rotate-90 text-white" />
+          </div>
+        </header>
+
+        <div className="grid min-h-[calc(100vh-104px)] grid-cols-[76px_minmax(0,1fr)] gap-3 p-4 md:grid-cols-[76px_minmax(0,1fr)]">
+          <aside className="flex flex-col items-center rounded-xl border border-white/10 bg-[#181818] py-4">
+            <button
+              type="button"
+              onClick={() => setActiveTask(null)}
+              className="grid size-14 place-items-center rounded-xl border border-white/10 bg-[#252525] text-white transition hover:bg-[#303030]"
+              aria-label="Back to practice classroom"
+            >
+              <ArrowLeft className="size-7" />
+            </button>
+            <div className="mt-5 grid w-full place-items-center border-y border-white/5 py-4">
+              <button className="grid size-9 place-items-center rounded bg-[#2b2b33] text-slate-200">
+                <ChevronRight className="size-5" />
+              </button>
+              <p className="mt-4 text-sm font-bold">{mcqProgress}%</p>
+              <div className="mt-2 h-1.5 w-10 rounded-full bg-white/20">
+                <div className="h-full rounded-full bg-[#d65a2b]" style={{ width: `${mcqProgress}%` }} />
+              </div>
+            </div>
+            <div className="mt-5 flex flex-1 flex-col items-center gap-3 rounded-xl bg-[#242424] p-2">
+              <button className="grid size-10 place-items-center rounded-lg bg-[#33333d] text-white">
+                <BookOpen className="size-6" />
+              </button>
+              {quiz.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setCurrentQuestionIndex(index)}
+                  className={`grid size-10 place-items-center rounded-lg border text-sm font-black ${
+                    index === currentQuestionIndex
+                      ? "border-[#d65a2b] bg-[#3a3a42] text-white"
+                      : submittedQuestions.includes(index)
+                        ? "border-[#58c83c]/60 bg-[#153315] text-[#58c83c]"
+                        : "border-white/10 bg-[#242424] text-slate-500"
+                  }`}
+                >
+                  <HelpCircle className="size-5" />
+                </button>
+              ))}
+              <button className="mt-auto grid size-10 place-items-center rounded-lg bg-[#242424] text-slate-400">
+                <PanelRight className="size-5" />
+              </button>
+            </div>
+          </aside>
+
+          <main className="grid min-w-0 gap-3 lg:grid-cols-[0.78fr_1.22fr]">
+            <section className="min-h-[calc(100vh-136px)] rounded-xl border border-white/10 bg-[#181818]">
+              <div className="flex h-16 items-center justify-between rounded-t-xl bg-[#242424] px-7">
+                <div className="flex items-center gap-3">
+                  <FileQuestion className="size-6 text-[#d65a2b]" />
+                  <p className="text-xl font-bold">MCQ&apos;s</p>
+                </div>
+                <div className="flex items-center gap-4 text-slate-400">
+                  <Bookmark className="size-6 text-[#d65a2b]" />
+                  <Maximize className="size-6" />
+                </div>
+              </div>
+              <div className="p-7">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h1 className="text-3xl font-medium tracking-tight">{activeTask.moduleTitle}</h1>
+                    <span className="mt-3 inline-flex rounded-full border border-[#d88420] px-4 py-1 text-sm font-black text-[#ffb13b]">
+                      {currentQuestion.difficulty}
+                    </span>
+                  </div>
+                  {completed.includes(activeTask.id) ? (
+                    <div className="flex items-center gap-2 text-[#58c83c]">
+                      <span className="font-bold">Completed</span>
+                      <CheckCircle2 className="size-6" />
+                    </div>
+                  ) : null}
+                </div>
+
+                <p className="mt-7 max-w-2xl text-xl leading-8 text-white">{currentQuestion.question}</p>
+              </div>
+            </section>
+
+            <section className="min-h-[calc(100vh-136px)] rounded-xl border border-white/10 bg-[#181818]">
+              <div className="flex h-16 items-center justify-between rounded-t-xl bg-[#242424] px-7">
+                <p className="text-lg font-bold">
+                  Options: <span className="ml-1 text-base font-medium text-[#666985]">Choose the correct option</span>
+                </p>
+                <div className="flex items-center gap-5">
+                  <p className="font-bold">Attempts {submittedQuestions.length}/{quiz.length}</p>
+                  <Maximize className="size-6 text-slate-400" />
+                </div>
+              </div>
+
+              <div className="p-8">
+                <div className="space-y-4">
+                  {currentQuestion.options.map((option, optionIndex) => {
+                    const selected = selectedOption === optionIndex;
+                    const isCorrect = isSubmitted && optionIndex === currentQuestion.answer;
+                    const isWrong = isSubmitted && selected && optionIndex !== currentQuestion.answer;
+
+                    return (
+                      <button
+                        key={option}
+                        type="button"
+                        onClick={() => {
+                          if (!isSubmitted) {
+                            setAnswers((items) => ({ ...items, [currentQuestionIndex]: optionIndex }));
+                          }
+                        }}
+                        className={`flex min-h-14 w-full items-center gap-4 rounded-lg border px-4 text-left text-lg transition ${
+                          isCorrect
+                            ? "border-[#58c83c] bg-[#102110] text-[#58c83c]"
+                            : isWrong
+                              ? "border-[#e35757] bg-[#2a1515] text-[#ff8a8a]"
+                              : selected
+                                ? "border-[#d65a2b] bg-[#211913] text-white"
+                                : "border-[#5b5b5b] bg-[#171717] text-[#696969] hover:border-[#d65a2b] hover:text-white"
+                        }`}
+                      >
+                        <span className={`size-6 rounded-full border-2 ${
+                          isCorrect
+                            ? "border-[#58c83c] bg-[#58c83c] shadow-[inset_0_0_0_5px_#171717]"
+                            : selected
+                              ? "border-[#d65a2b] bg-[#d65a2b] shadow-[inset_0_0_0_5px_#171717]"
+                              : "border-[#666]"
+                        }`} />
+                        {option}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-6 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={submitMcqAnswer}
+                    disabled={isSubmitted && correct}
+                    className="rounded bg-[#d45a2d] px-8 py-3 text-xl font-medium text-white transition hover:bg-[#eb6534] disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {isSubmitted ? "Submitted" : "Submit"}
+                  </button>
+                </div>
+
+                {isSubmitted ? (
+                  <div className="mt-7">
+                    <p className={`text-2xl font-medium ${correct ? "text-[#58c83c]" : "text-[#ff7777]"}`}>
+                      {correct ? "Correct answer!" : "Incorrect answer"}
+                    </p>
+                    <div className="mt-5 rounded-xl bg-[#222229] p-5">
+                      <p className="text-xl font-medium">Explanation:</p>
+                      <p className="mt-3 text-lg leading-7 text-[#a0a4d0]">{currentQuestion.explanation}</p>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          </main>
+        </div>
+
+        <footer className="fixed bottom-3 left-0 right-0 z-40 flex justify-center gap-20 pointer-events-none">
+          <button
+            type="button"
+            onClick={() => setCurrentQuestionIndex((value) => Math.max(0, value - 1))}
+            className="pointer-events-auto grid size-12 place-items-center rounded-lg border border-white/15 bg-[#202028] text-[#d65a2b] disabled:opacity-40"
+            disabled={currentQuestionIndex === 0}
+            aria-label="Previous lesson"
+          >
+            <ChevronLeft className="size-6" />
+          </button>
+          <div className="pointer-events-auto grid h-12 w-44 place-items-center rounded-lg border border-white/15 bg-[#202028] text-lg font-bold text-slate-300">
+            Lesson {currentQuestionIndex + 1}/{quiz.length}
+          </div>
+          <button
+            type="button"
+            onClick={() => setCurrentQuestionIndex((value) => Math.min(quiz.length - 1, value + 1))}
+            className="pointer-events-auto grid size-12 place-items-center rounded-lg border border-white/15 bg-[#202028] text-[#d65a2b] disabled:opacity-40"
+            disabled={currentQuestionIndex === quiz.length - 1}
+            aria-label="Next lesson"
+          >
+            <ChevronRight className="size-6" />
+          </button>
+        </footer>
       </div>
     );
   }
@@ -182,7 +606,11 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
                   <div className="h-2 rounded-full bg-white/10">
                     <div className={`h-full rounded-full bg-gradient-to-r ${selectedTrack.accent}`} style={{ width: `${Math.max(selectedTrack.progress, liveProgress)}%` }} />
                   </div>
-                  <button className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-100">
+                  <button
+                    type="button"
+                    onClick={openNextTask}
+                    className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-100"
+                  >
                     <PlayCircle className="size-4" />
                     Continue practice
                   </button>
@@ -193,7 +621,7 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
 
           <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {[
-              ["Learning streak", "21 days", Flame],
+              ["Learning streak", `${streak} ${streak === 1 ? "day" : "days"}`, Flame],
               ["XP earned", `${7640 + xpEarned}`, Trophy],
               ["Submissions", `${completedCount}/${totalTasks}`, Upload],
               ["Completion", `${liveProgress}%`, BadgeCheck]
@@ -290,13 +718,13 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
                           <span className="text-sm font-black text-cyan-200">{task.xp} XP</span>
                           <button
                             type="button"
-                            onClick={() => markTask(task)}
+                            onClick={() => openTask(task)}
                             className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-black transition ${
                               isDone ? "bg-emerald-400/15 text-emerald-100" : "bg-white text-slate-950 hover:bg-cyan-100"
                             }`}
                           >
                             {isDone ? <CheckCircle2 className="size-4" /> : <ChevronRight className="size-4" />}
-                            {isDone ? "Done" : "Start"}
+                            {isDone ? "Review" : "Start"}
                           </button>
                         </div>
                       </div>
@@ -364,6 +792,79 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
           </section>
         </aside>
       </div>
+
+      {activeTask ? (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 px-4 py-6 backdrop-blur-md">
+          <section className="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-[1.5rem] border border-white/10 bg-[#0b1020] shadow-2xl shadow-black/50">
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-white/10 bg-[#0b1020]/95 p-5 backdrop-blur">
+              <div className="min-w-0">
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-200">{typeMeta[activeTask.type].label} workspace</p>
+                <h3 className="mt-2 text-2xl font-black">{activeTask.title}</h3>
+                <p className="mt-1 text-sm font-bold text-slate-400">{activeTask.moduleTitle} · {activeTask.duration} · {activeTask.xp} XP</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveTask(null)}
+                className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 text-slate-200 transition hover:bg-white/15"
+                aria-label="Close practice workspace"
+              >
+                <X className="size-5" />
+              </button>
+            </div>
+
+            <div className="grid gap-5 p-5 lg:grid-cols-[minmax(0,1fr)_260px]">
+              <div className="space-y-4">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <p className="text-sm font-black uppercase tracking-[0.18em] text-slate-400">Task brief</p>
+                  <p className="mt-3 text-base leading-7 text-slate-200">{activeTask.prompt}</p>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <label className="text-sm font-black uppercase tracking-[0.18em] text-slate-400" htmlFor="practice-workspace">
+                    Your answer
+                  </label>
+                  <textarea
+                    id="practice-workspace"
+                    value={workspaceText}
+                    onChange={(event) => setWorkspaceText(event.target.value)}
+                    rows={10}
+                    className="mt-3 w-full resize-none rounded-2xl border border-white/10 bg-[#080d19] p-4 font-mono text-sm leading-6 text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-300/60"
+                    placeholder={
+                      activeTask.type === "coding" || activeTask.type === "sql"
+                        ? "Write your solution, code, query, or explanation here..."
+                        : "Write your project notes, interview answer, or revision summary here..."
+                    }
+                  />
+                </div>
+              </div>
+
+              <aside className="space-y-3">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <p className="text-sm font-black text-slate-400">Completion status</p>
+                  <p className="mt-2 text-3xl font-black">{workspaceText.trim().split(/\s+/).filter(Boolean).length}</p>
+                  <p className="text-sm font-bold text-slate-400">words written</p>
+                </div>
+                <div className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4">
+                  <p className="text-sm font-black text-cyan-100">Real streak rule</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">Your streak increases when you complete at least one practice task on a new day in this browser.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => completeTask(activeTask)}
+                  disabled={workspaceText.trim().length < 20}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-100 disabled:cursor-not-allowed disabled:bg-white/20 disabled:text-slate-500"
+                >
+                  <CheckCircle2 className="size-4" />
+                  Complete task
+                </button>
+                {completed.includes(activeTask.id) ? (
+                  <p className="rounded-xl bg-emerald-400/10 p-3 text-sm font-bold text-emerald-100">This task is already completed. You can review it anytime.</p>
+                ) : null}
+              </aside>
+            </div>
+          </section>
+        </div>
+      ) : null}
     </div>
   );
 }
