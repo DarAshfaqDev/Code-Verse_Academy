@@ -10,6 +10,12 @@ type Props = {
   chapterTitle: string;
   learningPath?: string;
   content: string;
+  previousChapters?: Array<{
+    number: number;
+    slug: string;
+    title: string;
+    content: string;
+  }>;
 };
 
 const modeLabels: Record<RevisionMode, string> = {
@@ -18,7 +24,7 @@ const modeLabels: Record<RevisionMode, string> = {
   deep: "Deep Revision"
 };
 
-export function RevisionAssistant({ topic, chapterTitle, learningPath, content }: Props) {
+export function RevisionAssistant({ topic, chapterTitle, learningPath, content, previousChapters = [] }: Props) {
   const [mode, setMode] = useState<RevisionMode>("quick");
   const [summary, setSummary] = useState<RevisionSummary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,6 +32,9 @@ export function RevisionAssistant({ topic, chapterTitle, learningPath, content }
   const [saved, setSaved] = useState(false);
   const [exitPrompt, setExitPrompt] = useState(false);
   const [error, setError] = useState("");
+  const [streakDay, setStreakDay] = useState("1");
+  const [selectedChapters, setSelectedChapters] = useState<string[]>(() => previousChapters.slice(-3).map((chapter) => chapter.slug));
+  const [warmupDismissed, setWarmupDismissed] = useState(false);
 
   const memory = useMemo(() => readMemory(), []);
 
@@ -49,7 +58,7 @@ export function RevisionAssistant({ topic, chapterTitle, learningPath, content }
     };
   }, [summary, content.length]);
 
-  async function generate(nextMode = mode) {
+  async function generate(nextMode = mode, override?: { title?: string; body?: string; completedTopics?: string[] }) {
     setOpen(true);
     setExitPrompt(false);
     setLoading(true);
@@ -61,11 +70,11 @@ export function RevisionAssistant({ topic, chapterTitle, learningPath, content }
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topic,
-          chapterTitle,
+          chapterTitle: override?.title || chapterTitle,
           learningPath,
           mode: nextMode,
-          content: content || `${chapterTitle} ${topic}`,
-          completedTopics: memory.completedTopics || [],
+          content: override?.body || content || `${chapterTitle} ${topic}`,
+          completedTopics: override?.completedTopics || memory.completedTopics || [],
           weakConcepts: memory.weakConcepts || [],
           quizScores: memory.quizScores || []
         })
@@ -83,6 +92,32 @@ export function RevisionAssistant({ topic, chapterTitle, learningPath, content }
     }
   }
 
+  function togglePreviousChapter(slug: string) {
+    setSelectedChapters((current) => (current.includes(slug) ? current.filter((item) => item !== slug) : [...current, slug]));
+  }
+
+  function generatePreviousSummary() {
+    const selected = previousChapters.filter((chapter) => selectedChapters.includes(chapter.slug));
+    const body = selected.length
+      ? selected.map((chapter) => `Chapter ${chapter.number}: ${chapter.title}\n${chapter.content}`).join("\n\n")
+      : content;
+    generate("quick", {
+      title: `Streak day ${streakDay || "1"} warm-up before ${chapterTitle}`,
+      body,
+      completedTopics: selected.map((chapter) => `${topic}: ${chapter.title}`)
+    });
+  }
+
+  function proceedWithoutSummary() {
+    setWarmupDismissed(true);
+    if (typeof window === "undefined") return;
+    const memory = readMemory();
+    window.localStorage.setItem(
+      "codeverse-learning-memory",
+      JSON.stringify({ ...memory, skippedWarmupFor: chapterTitle, lastStudiedAt: new Date().toISOString() })
+    );
+  }
+
   async function saveSummary() {
     if (!summary) return;
     const current = JSON.parse(window.localStorage.getItem("codeverse-revision-summaries") || "[]");
@@ -97,6 +132,68 @@ export function RevisionAssistant({ topic, chapterTitle, learningPath, content }
 
   return (
     <>
+      {!warmupDismissed && previousChapters.length ? (
+        <section className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-brand-700 dark:text-cyan-200">Before this chapter</p>
+              <h3 className="mt-2 text-2xl font-black">Review earlier reading for today</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                Pick chapters from your previous reading streak, then let the AI summarize them before you start. You can also continue without a recap.
+              </p>
+            </div>
+            <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 lg:max-w-md">
+              <label className="text-xs font-black uppercase tracking-[0.18em] text-slate-500" htmlFor="revision-streak-day">
+                Streak day
+              </label>
+              <input
+                id="revision-streak-day"
+                value={streakDay}
+                onChange={(event) => setStreakDay(event.target.value)}
+                className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-bold outline-none focus:border-brand-400 dark:border-slate-800 dark:bg-slate-950"
+                inputMode="numeric"
+              />
+              <div className="mt-4">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Chapters read</p>
+                <div className="mt-2 flex max-h-40 flex-wrap gap-2 overflow-y-auto">
+                  {previousChapters.map((chapter) => (
+                    <button
+                      type="button"
+                      key={chapter.slug}
+                      onClick={() => togglePreviousChapter(chapter.slug)}
+                      className={`rounded-full px-3 py-1.5 text-sm font-black transition ${
+                        selectedChapters.includes(chapter.slug)
+                          ? "bg-ink text-white dark:bg-white dark:text-ink"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-950 dark:text-slate-300"
+                      }`}
+                      title={chapter.title}
+                    >
+                      {chapter.number}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={generatePreviousSummary}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-sm font-black text-white dark:bg-white dark:text-ink"
+                >
+                  <Sparkles className="size-4" /> Summarize selected
+                </button>
+                <button
+                  type="button"
+                  onClick={proceedWithoutSummary}
+                  className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-black text-slate-600 dark:border-slate-800 dark:text-slate-300"
+                >
+                  Proceed without summary
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="rounded-2xl border border-cyan-200 bg-cyan-50 p-5 dark:border-cyan-900 dark:bg-cyan-950/30">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
