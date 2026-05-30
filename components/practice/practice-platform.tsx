@@ -588,28 +588,29 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
 
         <main className="min-w-0 space-y-5">
           <section className={`overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br ${selectedTrack.accent} p-px shadow-2xl shadow-black/30`}>
-            <div className="rounded-[1.65rem] bg-[#0b1020]/92 p-5 md:p-7">
-              <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+            <div className="rounded-[1.65rem] bg-[#0b1020]/94 p-5 md:p-7">
+              <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-end">
                 <div className="max-w-3xl">
                   <div className="flex flex-wrap gap-2">
                     <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-cyan-100">{selectedTrack.category}</span>
                     <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black text-slate-200">{selectedTrack.lessons} lessons</span>
                   </div>
-                  <h2 className="mt-5 text-3xl font-black tracking-tight md:text-5xl">{selectedTrack.title}</h2>
+                  <h2 className="mt-5 max-w-3xl text-4xl font-black tracking-tight md:text-5xl">{selectedTrack.title}</h2>
                   <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">{selectedTrack.description}</p>
                 </div>
-                <div className="grid min-w-[260px] gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-4">
-                  <div className="flex items-center justify-between">
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.05] p-4">
+                  <div className="flex items-center justify-between gap-3">
                     <span className="text-sm font-bold text-slate-300">Batch progress</span>
                     <span className="text-2xl font-black">{Math.max(selectedTrack.progress, liveProgress)}%</span>
                   </div>
-                  <div className="h-2 rounded-full bg-white/10">
+                  <div className="mt-3 h-2 rounded-full bg-white/10">
                     <div className={`h-full rounded-full bg-gradient-to-r ${selectedTrack.accent}`} style={{ width: `${Math.max(selectedTrack.progress, liveProgress)}%` }} />
                   </div>
                   <button
                     type="button"
                     onClick={openNextTask}
-                    className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-100"
+                    className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-100"
                   >
                     <PlayCircle className="size-4" />
                     Continue practice
@@ -661,46 +662,53 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
               </label>
             </div>
 
-            <div className="mt-5 grid gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
-              <div className="space-y-2">
-                {selectedTrack.modules.map((module) => (
-                  <button
-                    key={module.id}
-                    type="button"
-                    onClick={() => !module.locked && setSelectedModuleId(module.id)}
-                    className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition ${
-                      selectedModule?.id === module.id ? "border-cyan-300/50 bg-cyan-300/10" : "border-white/10 bg-white/[0.03] hover:bg-white/[0.07]"
-                    } ${module.locked ? "cursor-not-allowed opacity-55" : ""}`}
-                  >
-                    {module.locked ? <Lock className="size-4 text-slate-500" /> : <CircleDot className="size-4 text-cyan-200" />}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-black">{module.title}</p>
-                      <div className="mt-2 h-1 rounded-full bg-white/10">
-                        <div className="h-full rounded-full bg-cyan-300" style={{ width: `${module.progress}%` }} />
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-[#090f1d] p-4 md:flex-row md:items-center md:justify-between">
+            <div className="mt-5 space-y-4">
+              <div className="rounded-2xl border border-white/10 bg-[#090f1d] p-4">
+                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-200">Current module</p>
                     <h3 className="mt-1 text-xl font-black">{selectedModule?.title ?? "Practice module"}</h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-400">
+                      Use the horizontal modules below to move through the batch, then open any task in the main workspace.
+                    </p>
                   </div>
                   <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-sm font-black text-emerald-200">
-                    Daily challenge active
+                    {selectedModule?.tasks.length ?? 0} tasks in view
                   </span>
                 </div>
 
+                <div className="mt-4 overflow-x-auto pb-1">
+                  <div className="flex min-w-max gap-2">
+                    {selectedTrack.modules.map((module) => (
+                      <button
+                        key={module.id}
+                        type="button"
+                        onClick={() => !module.locked && setSelectedModuleId(module.id)}
+                        className={`flex w-[220px] items-center gap-3 rounded-2xl border p-3 text-left transition ${
+                          selectedModule?.id === module.id ? "border-cyan-300/50 bg-cyan-300/10" : "border-white/10 bg-white/[0.03] hover:bg-white/[0.07]"
+                        } ${module.locked ? "cursor-not-allowed opacity-55" : ""}`}
+                      >
+                        {module.locked ? <Lock className="size-4 shrink-0 text-slate-500" /> : <CircleDot className="size-4 shrink-0 text-cyan-200" />}
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-black">{module.title}</p>
+                          <div className="mt-2 h-1 rounded-full bg-white/10">
+                            <div className="h-full rounded-full bg-cyan-300" style={{ width: `${module.progress}%` }} />
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-3">
                 {filteredTasks.slice(0, 12).map((task) => {
                   const meta = typeMeta[task.type];
                   const Icon = meta.icon;
                   const isDone = completed.includes(task.id) || task.status === "done";
 
                   return (
-                    <article key={task.id} className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:border-cyan-300/40 hover:bg-white/[0.06]">
+                    <article key={task.id} className="rounded-2xl border border-white/10 bg-white/[0.035] p-5 transition hover:border-cyan-300/40 hover:bg-white/[0.06]">
                       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                         <div className="min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
@@ -712,7 +720,7 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
                             <span className="rounded-full bg-white/5 px-2.5 py-1 text-xs font-black text-slate-300">{task.duration}</span>
                           </div>
                           <h4 className="mt-3 text-lg font-black">{task.title}</h4>
-                          <p className="mt-2 text-sm leading-6 text-slate-400">{task.prompt}</p>
+                          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">{task.prompt}</p>
                         </div>
                         <div className="flex shrink-0 items-center gap-3 md:flex-col md:items-end">
                           <span className="text-sm font-black text-cyan-200">{task.xp} XP</span>

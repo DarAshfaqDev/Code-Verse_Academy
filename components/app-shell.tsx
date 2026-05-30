@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Languages, LogOut, Menu, Moon, Search, Sparkles, Sun, UserCircle, X } from "lucide-react";
+import { Bell, Languages, LogOut, Menu, Moon, PanelLeftOpen, Search, Sparkles, Sun, UserCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { navItems } from "@/lib/data";
 import { useTheme } from "@/components/theme-provider";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [practicePanelOpen, setPracticePanelOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const isPracticeRoute = pathname.startsWith("/practice");
+  const hideDesktopSidebar = isPracticeRoute && !practicePanelOpen;
 
   useEffect(() => {
     const syncAuth = () => setSignedIn(Boolean(window.localStorage.getItem("codeverse-token")));
@@ -24,6 +27,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     };
   }, [pathname]);
 
+  useEffect(() => {
+    if (!isPracticeRoute) {
+      setPracticePanelOpen(false);
+    }
+  }, [isPracticeRoute]);
+
   function handleLogout() {
     window.localStorage.removeItem("codeverse-token");
     window.localStorage.removeItem("codeverse-user");
@@ -33,9 +42,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-paper text-ink transition-colors dark:bg-slate-950 dark:text-slate-100">
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 border-r border-slate-200/70 bg-white/90 px-4 py-5 shadow-xl shadow-slate-200/40 backdrop-blur-xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-950/90 dark:shadow-black/20 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 border-r border-slate-200/70 bg-white/90 px-4 py-5 shadow-xl shadow-slate-200/40 backdrop-blur-xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-950/90 dark:shadow-black/20 ${
           open ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } ${hideDesktopSidebar ? "lg:-translate-x-full" : "lg:translate-x-0"}`}
       >
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
@@ -51,8 +60,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </Link>
           <button
             aria-label="Close navigation"
-            className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 lg:hidden"
-            onClick={() => setOpen(false)}
+            className={`rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 ${hideDesktopSidebar ? "lg:block" : "lg:hidden"}`}
+            onClick={() => {
+              setOpen(false);
+              setPracticePanelOpen(false);
+            }}
           >
             <X className="size-5" />
           </button>
@@ -74,7 +86,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  setPracticePanelOpen(false);
+                }}
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition ${
                   active
                     ? "bg-ink text-white shadow-lg shadow-slate-300/40 dark:bg-white dark:text-ink dark:shadow-black/20"
@@ -89,16 +104,33 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </nav>
       </aside>
 
-      <div className="lg:pl-72">
+      <div className={hideDesktopSidebar ? "lg:pl-0" : "lg:pl-72"}>
         <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-paper/82 backdrop-blur-2xl dark:border-slate-800 dark:bg-slate-950/82">
           <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
-            <button
-              aria-label="Open navigation"
-              className="rounded-xl border border-slate-200 bg-white p-2 dark:border-slate-800 dark:bg-slate-900 lg:hidden"
-              onClick={() => setOpen(true)}
-            >
-              <Menu className="size-5" />
-            </button>
+            {hideDesktopSidebar ? (
+              <button
+                aria-label="Back to main panel"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:text-ink dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-white"
+                onClick={() => {
+                  setPracticePanelOpen(true);
+                  setOpen(true);
+                }}
+              >
+                <PanelLeftOpen className="size-4" />
+                Back to panel
+              </button>
+            ) : (
+              <button
+                aria-label="Open navigation"
+                className="rounded-xl border border-slate-200 bg-white p-2 dark:border-slate-800 dark:bg-slate-900 lg:hidden"
+                onClick={() => {
+                  setOpen(true);
+                  setPracticePanelOpen(true);
+                }}
+              >
+                <Menu className="size-5" />
+              </button>
+            )}
             <div className="relative hidden flex-1 sm:block">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
               <input
