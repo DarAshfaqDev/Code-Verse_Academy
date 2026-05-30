@@ -12,10 +12,10 @@ export default function BlogPage() {
           <div className="max-w-3xl">
             <p className="text-sm font-black uppercase tracking-[0.28em] text-brand-700 dark:text-cyan-200">Blog</p>
             <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-              Articles you can actually read, save, and return to
+              Practical reading for learners who want depth, not noise
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-              Four long-form pieces from your Blogs.docx file, each opened as a proper reader with section jumps, smooth typography, and a clean new-tab option.
+              Explore long-form articles on JavaScript, SQL, machine learning, and frontend accessibility, all laid out for comfortable reading with section jumps and a clean new-tab option.
             </p>
             <div className="mt-6 flex flex-wrap gap-3 text-sm font-semibold text-slate-600 dark:text-slate-300">
               <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 dark:border-slate-800 dark:bg-slate-900">
