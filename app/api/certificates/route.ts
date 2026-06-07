@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { certificateTemplates, createCertificateId } from "@/lib/certificates";
+import { getAuthUserFromRequest } from "@/lib/auth";
 
 const analytics = {
   totalIssued: 1284,
@@ -8,7 +9,12 @@ const analytics = {
   activeTemplates: certificateTemplates.length
 };
 
-export async function GET() {
+export async function GET(request: Request) {
+  const user = getAuthUserFromRequest(request);
+  if (!user || user.role !== "admin") {
+    return NextResponse.json({ error: "Admin access required." }, { status: 403 });
+  }
+
   return NextResponse.json({
     ok: true,
     analytics,
@@ -29,6 +35,11 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const user = getAuthUserFromRequest(request);
+  if (!user || user.role !== "admin") {
+    return NextResponse.json({ error: "Admin access required." }, { status: 403 });
+  }
+
   const body = await request.json().catch(() => ({}));
   const certificateId = typeof body.certificateId === "string" && body.certificateId ? body.certificateId : createCertificateId();
 

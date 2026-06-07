@@ -2,8 +2,14 @@ import { NextResponse } from "next/server";
 import { generateRevisionSummary } from "@/lib/revision/agent";
 import { buildRevisionPrompt } from "@/lib/revision/prompts";
 import { RevisionRequest } from "@/lib/revision/types";
+import { getAuthUserFromRequest } from "@/lib/auth";
 
 export async function POST(request: Request) {
+  const user = getAuthUserFromRequest(request);
+  if (!user) {
+    return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+  }
+
   const body = (await request.json().catch(() => null)) as RevisionRequest | null;
 
   if (!body?.topic || !body?.chapterTitle || !body?.content) {

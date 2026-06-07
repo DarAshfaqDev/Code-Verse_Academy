@@ -20,16 +20,30 @@ export async function POST(request: Request) {
     ? email === configuredAdminEmail && password === configuredAdminPassword
     : false;
 
-  return NextResponse.json({
-    token: createAuthToken({
-      email,
-      name: isAdmin ? "CodeVerse Admin" : email.split("@")[0],
-      role: isAdmin ? "admin" : "student"
-    }),
+  const token = createAuthToken({
+    email,
+    name: isAdmin ? "CodeVerse Admin" : email.split("@")[0],
+    role: isAdmin ? "admin" : "student"
+  });
+
+  const response = NextResponse.json({
+    token,
     user: {
       name: isAdmin ? "CodeVerse Admin" : email.split("@")[0],
       email,
       role: isAdmin ? "admin" : "student"
     }
   });
+
+  response.cookies.set({
+    name: "codeverse-token",
+    value: token,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7
+  });
+
+  return response;
 }

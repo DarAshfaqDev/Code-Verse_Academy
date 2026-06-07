@@ -73,7 +73,23 @@ export function getAuthTokenFromHeaders(headers: Headers) {
   return token.trim();
 }
 
+export function getAuthTokenFromRequest(request: Request) {
+  const headerToken = getAuthTokenFromHeaders(request.headers);
+  if (headerToken) {
+    return headerToken;
+  }
+
+  const cookieHeader = request.headers.get("cookie") ?? "";
+  const match = cookieHeader.match(/(?:^|;\s*)codeverse-token=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : "";
+}
+
 export function getAuthUserFromHeaders(headers: Headers) {
   const token = getAuthTokenFromHeaders(headers);
+  return token ? verifyAuthToken(token) : null;
+}
+
+export function getAuthUserFromRequest(request: Request) {
+  const token = getAuthTokenFromRequest(request);
   return token ? verifyAuthToken(token) : null;
 }

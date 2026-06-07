@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import JSZip from "jszip";
 import { readPlaygroundProjects } from "@/lib/playground-store";
+import { getAuthUserFromRequest } from "@/lib/auth";
 
 function escapeHtml(value: string) {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
@@ -58,6 +59,11 @@ async function resolveProject(request: Request) {
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ format: string }> }) {
+  const user = getAuthUserFromRequest(request);
+  if (!user) {
+    return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+  }
+
   const { format } = await params;
   const project = await resolveProject(request);
   const safeTitle = project.title.replace(/[^a-z0-9]/gi, "_").toLowerCase() || "project";

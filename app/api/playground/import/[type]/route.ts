@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import JSZip from "jszip";
+import { getAuthUserFromRequest } from "@/lib/auth";
 
 type ImportedPayload = {
   html: string;
@@ -26,6 +27,11 @@ function parseHtmlFile(html: string): ImportedPayload {
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ type: string }> }) {
+  const user = getAuthUserFromRequest(request);
+  if (!user) {
+    return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+  }
+
   const { type } = await params;
   const formData = await request.formData().catch(() => null);
   const file = formData?.get("file");

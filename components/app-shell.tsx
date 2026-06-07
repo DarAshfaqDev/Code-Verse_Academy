@@ -1,22 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Bell, Languages, LogOut, Menu, Moon, PanelLeftOpen, Sparkles, Sun, UserCircle, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { navItems } from "@/lib/data";
 import { useTheme } from "@/components/theme-provider";
 import { GlobalSearch } from "@/components/global-search";
 
+type SessionUser = {
+  name: string;
+  email: string;
+  role: "admin" | "student";
+};
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [practicePanelOpen, setPracticePanelOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
+  const [user, setUser] = useState<SessionUser | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
   const previousPathRef = useRef(pathname);
   const { theme, toggleTheme } = useTheme();
   const isWorkspaceRoute = pathname.startsWith("/practice") || pathname.startsWith("/playground");
   const hideDesktopSidebar = isWorkspaceRoute && !practicePanelOpen;
+  const visibleNavItems = navItems.filter((item) => item.href !== "/admin" || user?.role === "admin");
+
+  function readStoredUser() {
+    try {
+      const rawUser = window.localStorage.getItem("codeverse-user");
+      return rawUser ? (JSON.parse(rawUser) as SessionUser) : null;
+    } catch {
+      return null;
+    }
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -36,13 +54,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         if (!response.ok) {
           window.localStorage.removeItem("codeverse-token");
           window.localStorage.removeItem("codeverse-user");
-          if (!cancelled) setSignedIn(false);
+          if (!cancelled) {
+            setSignedIn(false);
+            setUser(null);
+          }
           return;
         }
 
-        if (!cancelled) setSignedIn(true);
+        const data = (await response.json()) as { user?: SessionUser };
+        if (!cancelled) {
+          setSignedIn(true);
+          setUser(data.user ?? null);
+        }
       } catch {
-        if (!cancelled) setSignedIn(Boolean(window.localStorage.getItem("codeverse-token")));
+        if (!cancelled) {
+          setSignedIn(Boolean(window.localStorage.getItem("codeverse-token")));
+          setUser(readStoredUser());
+        }
       }
     };
 
@@ -55,6 +83,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       window.removeEventListener("codeverse-auth", syncAuth);
     };
   }, [pathname]);
+
+  useEffect(() => {
+    if (pathname.startsWith("/admin") && signedIn && user?.role !== "admin") {
+      router.replace("/dashboard");
+    }
+  }, [pathname, router, signedIn, user?.role]);
 
   useEffect(() => {
     const previousPath = previousPathRef.current;
@@ -75,7 +109,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   function handleLogout() {
     window.localStorage.removeItem("codeverse-token");
     window.localStorage.removeItem("codeverse-user");
+    void fetch("/api/auth/logout", { method: "POST" }).catch(() => undefined);
+    setSignedIn(false);
+    setUser(null);
     window.dispatchEvent(new Event("codeverse-auth"));
+    router.push("/login");
   }
 
   return (
@@ -118,7 +156,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <nav className="mt-6 space-y-1">
-          {navItems.map((item) => {
+          {visibleNavItems.map((item) => {
             const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
             const Icon = item.icon;
             return (
@@ -198,7 +236,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className="inline-flex items-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5 dark:bg-white dark:text-ink"
                 >
                   <UserCircle className="size-4" />
-                  Profile
+                  {user?.role === "admin" ? "Admin" : "Profile"}
                 </Link>
                 <button
                   onClick={handleLogout}

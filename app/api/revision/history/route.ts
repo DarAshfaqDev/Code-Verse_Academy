@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getAuthUserFromRequest } from "@/lib/auth";
 
 const demoHistory = [
   {
@@ -22,6 +23,11 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const user = getAuthUserFromRequest(request);
+  if (!user) {
+    return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+  }
+
   const body = await request.json().catch(() => null);
   return NextResponse.json({ saved: true, data: body });
 }

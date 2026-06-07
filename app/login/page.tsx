@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Github, Loader2, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,7 +33,7 @@ export default function LoginPage() {
       window.localStorage.setItem("codeverse-token", data.token);
       window.localStorage.setItem("codeverse-user", JSON.stringify(data.user));
       window.dispatchEvent(new Event("codeverse-auth"));
-      router.push("/dashboard");
+      router.push(searchParams.get("next") || "/dashboard");
       router.refresh();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Login failed. Please try again.");
