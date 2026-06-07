@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Github, Loader2, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Github, Loader2, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -10,6 +10,7 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -78,12 +79,20 @@ export default function LoginPage() {
               <input
                 className="w-full bg-transparent outline-none"
                 placeholder="••••••••"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 minLength={6}
                 required
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((current) => !current)}
+                className="rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-ink dark:hover:bg-slate-800 dark:hover:text-white"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
             </span>
           </label>
           {error ? (

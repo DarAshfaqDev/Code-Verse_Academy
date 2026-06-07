@@ -232,7 +232,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {signedIn ? (
               <div className="flex items-center gap-2">
                 <Link
-                  href="/profile"
+                  href={user?.role === "admin" ? "/admin" : "/profile"}
                   className="inline-flex items-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5 dark:bg-white dark:text-ink"
                 >
                   <UserCircle className="size-4" />
