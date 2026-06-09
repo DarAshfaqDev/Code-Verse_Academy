@@ -8,6 +8,8 @@ import Toolbar from "./Toolbar";
 import TemplateSelector from "./TemplateSelector";
 import LibraryManager from "./LibraryManager";
 import ProjectManager from "./ProjectManager";
+import PythonSandbox from "./python-sandbox";
+import SQLSandbox from "./sql-sandbox";
 import { useProject } from "./hooks/useProject";
 import { useConsole } from "./hooks/useConsole";
 import type { PlaygroundLibrary, PlaygroundProject, PlaygroundUser } from "./types";
@@ -32,8 +34,8 @@ type PlaygroundProps = {
 };
 
 const Playground = ({ projectId, user, isAuthenticated }: PlaygroundProps) => {
-  const [layout, setLayout] = useState<"horizontal" | "vertical" | "tabs">("horizontal"); // horizontal, vertical, tabs
-  const [activeEditor, setActiveEditor] = useState<"html" | "css" | "javascript">("html");
+  const [layout, setLayout] = useState<"horizontal" | "vertical" | "tabs">("horizontal");
+  const [activeEditor, setActiveEditor] = useState<"html" | "css" | "javascript" | "python" | "sql">("html");
   const [autoRun, setAutoRun] = useState(true);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [fontSize, setFontSize] = useState(14);
@@ -45,6 +47,7 @@ const Playground = ({ projectId, user, isAuthenticated }: PlaygroundProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [consoleHeight, setConsoleHeight] = useState(200);
   const [runTick, setRunTick] = useState(0);
+  const [sandboxSaving, setSandboxSaving] = useState(false);
   
   const { project, saveProject } = useProject(projectId, user);
   const { logs, addLog, clearLogs } = useConsole();
@@ -153,6 +156,27 @@ const Playground = ({ projectId, user, isAuthenticated }: PlaygroundProps) => {
     }
   };
 
+  const isSandboxMode = activeEditor === "python" || activeEditor === "sql";
+
+  const handleSandboxSave = async (code: string) => {
+    setSandboxSaving(true);
+    try {
+      await fetch("/api/practice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user?.email || "demo-user",
+          sandboxType: activeEditor,
+          savedState: code,
+        }),
+      });
+    } catch {
+      // silent
+    } finally {
+      setSandboxSaving(false);
+    }
+  };
+
   return (
     <div className={`playground-container theme-${theme} layout-${layout} ${isFullscreen ? 'fullscreen' : ''}`}>
       <Toolbar
@@ -181,18 +205,27 @@ const Playground = ({ projectId, user, isAuthenticated }: PlaygroundProps) => {
         isFullscreen={isFullscreen}
       />
 
+      {isSandboxMode ? (
+        <div className="playground-main">
+          {activeEditor === "python" ? (
+            <PythonSandbox onSave={handleSandboxSave} isSaving={sandboxSaving} />
+          ) : (
+            <SQLSandbox onSave={handleSandboxSave} isSaving={sandboxSaving} />
+          )}
+        </div>
+      ) : (
       <div className="playground-main">
         <div className="editors-section">
           {layout === 'tabs' ? (
             <div className="editor-tabs">
               <div className="tab-buttons">
-                {(['html', 'css', 'javascript'] as const).map((lang) => (
+                {(['html', 'css', 'javascript', 'python', 'sql'] as const).map((lang) => (
                   <button
                     key={lang}
                     className={`tab-btn ${activeEditor === lang ? 'active' : ''}`}
                     onClick={() => setActiveEditor(lang)}
                   >
-                    {lang.toUpperCase()}
+                    {lang === "python" ? "Python" : lang === "sql" ? "SQL" : lang.toUpperCase()}
                   </button>
                 ))}
               </div>
@@ -230,6 +263,7 @@ const Playground = ({ projectId, user, isAuthenticated }: PlaygroundProps) => {
           />
         </div>
       </div>
+      )}
 
       {showConsole && (
         <ConsolePanel

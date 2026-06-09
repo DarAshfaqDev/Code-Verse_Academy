@@ -31,6 +31,9 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { PracticeTask, PracticeTaskType, PracticeTrack } from "@/lib/practice";
+import dynamic from "next/dynamic";
+
+const SQLSandbox = dynamic(() => import("@/components/playground-ide/sql-sandbox"), { ssr: false });
 
 type PracticePlatformProps = {
   tracks: PracticeTrack[];
@@ -276,6 +279,10 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
     } else {
       setToast("Try again. Read the explanation and choose carefully.");
     }
+  }
+
+  function handleSqlSave(query: string) {
+    setWorkspaceText(query);
   }
 
   function submitWork() {
@@ -829,20 +836,26 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                   <label className="text-sm font-black uppercase tracking-[0.18em] text-slate-400" htmlFor="practice-workspace">
-                    Your answer
+                    {activeTask.type === "sql" ? "SQL Workspace" : "Your answer"}
                   </label>
-                  <textarea
-                    id="practice-workspace"
-                    value={workspaceText}
-                    onChange={(event) => setWorkspaceText(event.target.value)}
-                    rows={10}
-                    className="mt-3 w-full resize-none rounded-2xl border border-white/10 bg-[#080d19] p-4 font-mono text-sm leading-6 text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-300/60"
-                    placeholder={
-                      activeTask.type === "coding" || activeTask.type === "sql"
-                        ? "Write your solution, code, query, or explanation here..."
-                        : "Write your project notes, interview answer, or revision summary here..."
-                    }
-                  />
+                  {activeTask.type === "sql" ? (
+                    <div className="mt-3 h-[350px]">
+                      <SQLSandbox onSave={handleSqlSave} />
+                    </div>
+                  ) : (
+                    <textarea
+                      id="practice-workspace"
+                      value={workspaceText}
+                      onChange={(event) => setWorkspaceText(event.target.value)}
+                      rows={10}
+                      className="mt-3 w-full resize-none rounded-2xl border border-white/10 bg-[#080d19] p-4 font-mono text-sm leading-6 text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-300/60"
+                      placeholder={
+                        activeTask.type === "coding"
+                          ? "Write your solution, code, or explanation here..."
+                          : "Write your project notes, interview answer, or revision summary here..."
+                      }
+                    />
+                  )}
                 </div>
               </div>
 
@@ -859,7 +872,7 @@ export function PracticePlatform({ tracks }: PracticePlatformProps) {
                 <button
                   type="button"
                   onClick={() => completeTask(activeTask)}
-                  disabled={workspaceText.trim().length < 20}
+                  disabled={activeTask.type === "sql" ? workspaceText.trim().length < 5 : workspaceText.trim().length < 20}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-100 disabled:cursor-not-allowed disabled:bg-white/20 disabled:text-slate-500"
                 >
                   <CheckCircle2 className="size-4" />
