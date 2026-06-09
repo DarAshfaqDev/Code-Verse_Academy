@@ -3,8 +3,20 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
-import { useState, useEffect } from "react";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { useState, useEffect, useRef } from "react";
+
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: { client_id: string; callback: (res: { credential: string }) => void }) => void;
+          renderButton: (el: HTMLElement, options: Record<string, unknown>) => void;
+        };
+      };
+    };
+  }
+}
 
 type Props = {
   nextPath: string;
@@ -28,6 +40,7 @@ function LoginFormInner({ nextPath }: Props) {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [streakData, setStreakData] = useState<{ currentStreak: number; longestStreak: number } | null>(null);
+  const googleBtnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const token = window.localStorage.getItem("codeverse-token");
@@ -38,6 +51,58 @@ function LoginFormInner({ nextPath }: Props) {
         .catch(() => {});
     }
   }, []);
+
+  useEffect(() => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (!clientId || !googleBtnRef.current) return;
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      if (window.google?.accounts?.id) {
+        window.google.accounts.id.initialize({
+          client_id: clientId,
+          callback: handleGoogleCredential,
+        });
+        window.google.accounts.id.renderButton(googleBtnRef.current!, {
+          theme: "outline",
+          size: "large",
+          shape: "rectangular",
+          text: "continue_with",
+          width: googleBtnRef.current?.clientWidth || 300,
+        });
+      }
+    };
+    document.body.appendChild(script);
+    return () => { script.remove(); };
+  }, []);
+
+  async function handleGoogleCredential(response: { credential: string }) {
+    if (!response.credential) return;
+    setGoogleLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential: response.credential }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Google sign-in failed.");
+      }
+
+      doLogin(data.token, data.user, router, nextPath);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Google sign-in failed. Please try again.");
+    } finally {
+      setGoogleLoading(false);
+    }
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -61,31 +126,6 @@ function LoginFormInner({ nextPath }: Props) {
       setError(caught instanceof Error ? caught.message : "Login failed. Please try again.");
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function handleGoogleSuccess(credentialResponse: { credential?: string }) {
-    if (!credentialResponse.credential) return;
-    setGoogleLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch("/api/auth/google", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ credential: credentialResponse.credential }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Google sign-in failed.");
-      }
-
-      doLogin(data.token, data.user, router, nextPath);
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Google sign-in failed. Please try again.");
-    } finally {
-      setGoogleLoading(false);
     }
   }
 
@@ -159,17 +199,9 @@ function LoginFormInner({ nextPath }: Props) {
               <div className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 py-3 font-black dark:border-slate-800">
                 <Loader2 className="size-5 animate-spin" /> Connecting...
               </div>
-            ) : (
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => setError("Google sign-in failed.")}
-                theme="outline"
-                size="large"
-                shape="rectangular"
-                text="continue_with"
-                width="100%"
-              />
-            )}
+            ) : process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
+              <div ref={googleBtnRef} className="flex justify-center"></div>
+            ) : null}
           </div>
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-slate-200 dark:border-slate-800" /></div>
@@ -185,11 +217,5 @@ function LoginFormInner({ nextPath }: Props) {
 }
 
 export default function LoginForm({ nextPath }: Props) {
-  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "";
-  if (!clientId) return <LoginFormInner nextPath={nextPath} />;
-  return (
-    <GoogleOAuthProvider clientId={clientId}>
-      <LoginFormInner nextPath={nextPath} />
-    </GoogleOAuthProvider>
-  );
+  return <LoginFormInner nextPath={nextPath} />;
 }
