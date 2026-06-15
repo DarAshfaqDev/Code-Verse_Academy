@@ -344,18 +344,35 @@ elements: [Job_A, Job_B, Job_C]
     }
   };
 
+  async function captureElement(el: HTMLDivElement, scale = 2) {
+    const origOverflow = el.style.overflow;
+    el.style.overflow = "visible";
+    await new Promise((r) => setTimeout(r, 150));
+    const rect = el.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      el.style.overflow = origOverflow;
+      throw new Error("Element has zero dimensions");
+    }
+    const canvas = await html2canvas(el, {
+      scale,
+      useCORS: false,
+      backgroundColor: "#fafaf9",
+      logging: false,
+      width: rect.width,
+      height: rect.height,
+    });
+    el.style.overflow = origOverflow;
+    if (!canvas.width || !canvas.height) throw new Error("Empty canvas");
+    return canvas;
+  }
+
   const handleExportAsImage = async (format: "png" | "jpeg" = "png") => {
     setExporting(true);
     setExportMessage(`Generating ${format.toUpperCase()}...`);
     try {
       const el = notebookPageRef.current;
       if (!el) throw new Error("Element not found");
-      const canvas = await html2canvas(el, {
-        scale: 2,
-        backgroundColor: "#fafaf9",
-        useCORS: false,
-        logging: false,
-      });
+      const canvas = await captureElement(el, 2);
       const link = document.createElement("a");
       link.download = `slide_${activeSlideIndex + 1}_sketch.${format === "jpeg" ? "jpg" : "png"}`;
       link.href = canvas.toDataURL(format === "jpeg" ? "image/jpeg" : "image/png");
@@ -379,18 +396,14 @@ elements: [Job_A, Job_B, Job_C]
       for (let i = 0; i < slides.length; i++) {
         setExportMessage(`Page ${i + 1} of ${slides.length}...`);
         setActiveSlideIndex(i);
-        await new Promise((r) => setTimeout(r, 500));
+        await new Promise((r) => setTimeout(r, 600));
 
         const el = notebookPageRef.current;
         if (!el) continue;
-        const canvas = await html2canvas(el, {
-          scale: 1.5,
-          useCORS: false,
-          backgroundColor: "#fafaf9",
-          logging: false,
-        });
+        const canvas = await captureElement(el, 1.5);
+        const imgData = canvas.toDataURL("image/png");
         if (i > 0) pdf.addPage();
-        pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 842, 595);
+        pdf.addImage(imgData, "PNG", 0, 0, 842, 595);
       }
 
       setActiveSlideIndex(originalIndex);
