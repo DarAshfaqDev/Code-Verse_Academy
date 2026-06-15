@@ -116,6 +116,7 @@ export default function SlideToSketchStudio() {
   const [newStackItem, setNewStackItem] = useState("");
   const [liveQueue, setLiveQueue] = useState(["Job_1", "Job_2", "Job_3"]);
   const [newQueueItem, setNewQueueItem] = useState("");
+  const [activeMatrixCell, setActiveMatrixCell] = useState({ r: 1, c: 2 });
   const [mounted, setMounted] = useState(false);
 
   const [slides, setSlides] = useState<Slide[]>([
@@ -142,7 +143,90 @@ for(int i = 0; i < n; i++) {
     },
     {
       id: "slide-2",
-      title: "Ch 2: Stack LIFO Buffer Operations",
+      title: "Ch 2: Aux Space vs Space Complexity",
+      paragraph:
+        "Space complexity calculates the total memory footprint of an algorithm during execution, including input structures. Auxiliary Space measures only the extra temporary storage created.",
+      bullets: [
+        "Input space is fixed and cannot be optimized by algorithm design.",
+        "Auxiliary space represents temporary stack frames or buffers.",
+        "Merge Sort requires O(N) auxiliary space for split array staging.",
+      ],
+      code: `// O(1) Auxiliary Space vs O(N) Space
+int findSum(int arr[], int n) {
+    int sum = 0; // O(1) Auxiliary Space
+    for(int i = 0; i < n; i++) sum += arr[i];
+    return sum;
+}`,
+      visualType: "none",
+      visualData: "",
+      cueKeywords: "Memory, Auxiliary Space, Buffer Stack, Footprint",
+      summary:
+        "Differentiating space types ensures we optimize algorithms without miscalculating the immutable input storage size.",
+    },
+    {
+      id: "slide-3",
+      title: "Ch 3: Array Memory Address & Offsets",
+      paragraph:
+        "An array stores homogeneous variables inside back-to-back adjacent memory locations. Offsets are calculated directly from a starting Base Address.",
+      bullets: [
+        "Base Address: The starting coordinate of the first block (index 0).",
+        "Element Size: The byte length of the underlying datatype (e.g., int is 4 bytes).",
+        "Addressing Formula: Address of A[i] = BaseAddress + (i * ElementSize)",
+      ],
+      code: `// Memory layout demonstration
+int arr[5] = {10, 20, 30, 40, 50};
+// arr[3] is at: Base + (3 * 4 bytes) = Base + 12`,
+      visualType: "array",
+      visualData: "102, 204, 306, 408, 510",
+      cueKeywords: "Contiguous, Base Address, Elements Size, Memory Index",
+      summary:
+        "Contiguous allocations allow CPU cache pre-fetching, offering unbeatable constant O(1) physical access times.",
+    },
+    {
+      id: "slide-4",
+      title: "Ch 4: 2D Array Row-Major Flattening",
+      paragraph:
+        "A 2D grid matrix is represented visually as rows and columns. However, physical RAM is strictly linear. Compilers flatten rows sequentially into continuous blocks.",
+      bullets: [
+        "Row-Major Order: Element storage flows row-by-row sequentially.",
+        "Total Columns (C) acts as the multiplier stride length.",
+        "Address Formula: Base + [ (Row * TotalCols) + Col ] * ElementSize",
+      ],
+      code: `// 2D Array Mapping in RAM
+int matrix[3][4]; // 3 Rows, 4 Cols
+// Accessing matrix[1][2] maps linearly to 1D index: (1 * 4) + 2 = 6`,
+      visualType: "matrix",
+      visualData: "3, 4",
+      cueKeywords: "Flattening, Matrix, Stride, Row-Major",
+      summary:
+        "Row-Major loops should iterate outer-row and inner-col to align cache strides perfectly and prevent cache misses.",
+    },
+    {
+      id: "slide-5",
+      title: "Ch 5: Linear Array Element Deletion",
+      paragraph:
+        "Deleting elements from a static array requires left-shifting all subsequent variables over by one position to overwrite the targeted index and avoid empty gaps.",
+      bullets: [
+        "Overwrite Phase: Target element value is immediately replaced.",
+        "Left Shift: Elements from target+1 up to size-1 are copied to preceding slots.",
+        "Complexity: O(N) average and worst-case due to bulk shifting.",
+      ],
+      code: `// Array Deletion Logic
+void deleteElement(int arr[], int& size, int index) {
+    for(int i = index; i < size - 1; i++) {
+        arr[i] = arr[i + 1]; // Left Shift
+    }
+    size--;
+}`,
+      visualType: "array",
+      visualData: "5, 15, 30, 40, 50",
+      cueKeywords: "Fragmentation, Deletion, Left Shift, Overwrite",
+      summary:
+        "Shifting overhead makes deletions in static contiguous arrays slow, highlighting the benefits of Linked Lists.",
+    },
+    {
+      id: "slide-6",
+      title: "Ch 6: Stack LIFO Buffer Operations",
       paragraph:
         "A Stack is a linear logical structure operating under the Last In First Out (LIFO) protocol. Insertion and deletion happen exclusively at the top index.",
       bullets: [
@@ -162,8 +246,8 @@ buffer.pop();`,
         "Stack buffers manage context frames during execution and power depth-first graph exploration algorithms.",
     },
     {
-      id: "slide-3",
-      title: "Ch 3: Queue FIFO Conveyor Line",
+      id: "slide-7",
+      title: "Ch 7: Queue FIFO Conveyor Line",
       paragraph:
         "A Queue represents a First In First Out (FIFO) pipeline. Insertion happens at the rear tail of the buffer, while extraction occurs at the front head.",
       bullets: [
@@ -174,8 +258,8 @@ buffer.pop();`,
       ],
       code: `// C++ Queue Pipeline
 std::queue<int> tasks;
-tasks.push(101); // Enqueue at Rear
-tasks.pop();     // Dequeue from Front`,
+tasks.push(101);
+tasks.pop();`,
       visualType: "queue",
       visualData: "Job_1, Job_2, Job_3",
       cueKeywords: "FIFO, Enqueue, Dequeue, Front, Rear",
@@ -183,8 +267,8 @@ tasks.pop();     // Dequeue from Front`,
         "Queues maintain order in asynchronous task dispatch systems, CPU thread scheduling, and breadth-first search traversals.",
     },
     {
-      id: "slide-4",
-      title: "Ch 4: Binary Search Tree Nodes",
+      id: "slide-8",
+      title: "Ch 8: Binary Search Tree Nodes",
       paragraph:
         "A Binary Search Tree (BST) organizes node elements hierarchically. Each parent contains at most two children, maintaining sorted relational invariants.",
       bullets: [
@@ -204,6 +288,53 @@ void inorder(Node* root) {
       cueKeywords: "BST, Invariant, Height, Inorder, Traversal",
       summary:
         "BST in-order traversals process keys in sorted ascending order, making them excellent for fast lookup database indexes.",
+    },
+    {
+      id: "slide-9",
+      title: "Ch 9: Graph Representation Methods",
+      paragraph:
+        "Graphs represent network architectures of Vertices connected via Edge relationships. We model connections using matrices or linked catalogs.",
+      bullets: [
+        "Adjacency Matrix: A 2D array of size V x V. Quick O(1) link lookups.",
+        "Adjacency List: An array of lists tracking each node's adjacent neighbors.",
+        "Space Tradeoff: Adjacency matrices use O(V^2) memory, list catalogs use O(V+E).",
+      ],
+      code: `// Adjacency Matrix connection check
+bool isConnected = matrix[nodeA][nodeB] == 1;
+
+// Adjacency List iteration
+for(int neighbor : adjList[nodeA]) {
+    // Process connection link
+}`,
+      visualType: "none",
+      visualData: "",
+      cueKeywords: "Graph, Adjacency Matrix, Adjacency List, Dense",
+      summary:
+        "Adjacency matrices are preferred for dense graphs, while adjacency lists optimize memory usage in sparse networks.",
+    },
+    {
+      id: "slide-10",
+      title: "Ch 10: BFS vs DFS Traversals",
+      paragraph:
+        "Breadth-First Search (BFS) and Depth-First Search (DFS) are fundamental traversal strategies used to systematically visit every vertex in a graph.",
+      bullets: [
+        "BFS (Level-Order): Explores nodes layer by layer using an active Queue.",
+        "DFS (Deep-Walk): Explores deep along branches using a recursive Call Stack.",
+        "BFS Application: Shortest path routing in unweighted networks.",
+        "DFS Application: Topological ordering and cycle detection.",
+      ],
+      code: `// DFS Walk recursion
+void dfs(int node, vector<bool>& visited) {
+    visited[node] = true;
+    for(int neighbor : adj[node]) {
+        if(!visited[neighbor]) dfs(neighbor, visited);
+    }
+}`,
+      visualType: "none",
+      visualData: "",
+      cueKeywords: "Traversal, BFS, DFS, Queue, Call Stack, Path",
+      summary:
+        "BFS identifies the closest path step-by-step, while DFS dives deeply to discover connectivity pathways.",
     },
   ]);
 
@@ -318,6 +449,7 @@ elements: [Job_A, Job_B, Job_C]
             else if (lower.includes("stack")) visualType = "stack";
             else if (lower.includes("queue")) visualType = "queue";
             else if (lower.includes("tree")) visualType = "tree";
+            else if (lower.includes("matrix")) visualType = "matrix";
             else visualType = "array";
           } else {
             paragraph += (paragraph ? " " : "") + line;
@@ -842,6 +974,39 @@ elements: [Job_A, Job_B, Job_C]
                           <span className="-mt-1 font-mono text-[8px] text-slate-400">idx {i}</span>
                         </div>
                       ))}
+                    </div>
+                  )}
+
+                  {activeSlide.visualType === "matrix" && (
+                    <div className="mt-2 max-w-md rounded-xl border border-slate-300 bg-white/70 p-4">
+                      <div className="mb-2 text-center text-xs font-bold text-slate-500">2D Row-Major Address Mapping (Base Address = 200, Cell = 4 Bytes)</div>
+                      <div className="flex items-center justify-center gap-4">
+                        <div className="grid grid-cols-4 gap-1.5 rounded-xl bg-slate-800 p-2">
+                          {[[1,2,3,4],[5,6,7,8],[9,10,11,12]].map((row, rIdx) =>
+                            row.map((val, cIdx) => {
+                              const isSelected = activeMatrixCell.r === rIdx && activeMatrixCell.c === cIdx;
+                              return (
+                                <button
+                                  key={`${rIdx}-${cIdx}`}
+                                  onClick={() => setActiveMatrixCell({ r: rIdx, c: cIdx })}
+                                  className={`flex h-9 w-9 flex-col items-center justify-center rounded border text-xs font-bold transition-all ${
+                                    isSelected ? "scale-105 border-amber-900 bg-amber-400 text-slate-950" : "border-slate-700 bg-slate-950 text-slate-200"
+                                  }`}
+                                >
+                                  <span>{val}</span>
+                                  <span className="text-[8px] opacity-60">[{rIdx}][{cIdx}]</span>
+                                </button>
+                              );
+                            })
+                          )}
+                        </div>
+                        <div className="rounded-lg border bg-slate-100 p-2.5 font-mono text-[10px] leading-tight">
+                          <span className="mb-1 block font-bold text-amber-800">Offset Calculation:</span>
+                          Address = Base + [ (Row × Cols) + Col ] × Size<br/>
+                          = 200 + [ ({activeMatrixCell.r} × 4) + {activeMatrixCell.c} ] × 4<br/>
+                          = <span className="font-bold text-emerald-700">200 + {((activeMatrixCell.r * 4) + activeMatrixCell.c) * 4} = {200 + ((activeMatrixCell.r * 4) + activeMatrixCell.c) * 4}</span>
+                        </div>
+                      </div>
                     </div>
                   )}
 
