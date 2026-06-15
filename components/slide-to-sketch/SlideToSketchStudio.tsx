@@ -929,7 +929,7 @@ elements: [Job_A, Job_B, Job_C]
               }}
             >
               <div className="no-print absolute right-2 top-0 flex select-none flex-col items-end opacity-90">
-                <span className="font-['Architects_Daughter'] text-sm font-bold text-rose-800">@curious_programmer</span>
+                <span className="font-['Architects_Daughter'] text-sm font-bold text-rose-800">CodeVerse Academy</span>
                 <span className="-mt-2 font-mono text-[8px] uppercase tracking-widest text-slate-400">Revision Visual Guide</span>
               </div>
 
